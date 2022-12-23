@@ -21,7 +21,15 @@ public class ListingService {
         return null;
     }
 
+    public List<Listing> findAllOpenListings() {
+        return null;
+    }
+
     public Listing findByListingNumber(String listingNumber) {
+        return null;
+    }
+
+    public List<Listing> findParameterizedListings(int squareFootage, int price, int numBedrooms, int numBathrooms, int lotSize) {
         return null;
     }
 
@@ -29,6 +37,9 @@ public class ListingService {
         return null;
     }
 
+    public void updateStatus(String listingNumber, String updatedListingStatus) {
+
+    }
     public void updatePrice(String listingNumber, int updatedPrice) {
 //        Listing listing = findByListingNumber(listingNumber);
 //        ListingRecord listingRecord = new ListingRecord();

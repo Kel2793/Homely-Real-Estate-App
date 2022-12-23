@@ -27,25 +27,13 @@ public class ListingCreateRequest {
     @JsonProperty("numBathrooms")
     private double numBathrooms;
 
-    @Min(0)
-    @JsonProperty("numRooms")
-    private int numRooms;
-
     @NotEmpty
     @JsonProperty("listingStatus")
     private String listingStatus;
 
-    @NotEmpty
-    @JsonProperty("schoolDistrict")
-    private String schoolDistrict;
-
     @Min(0)
     @JsonProperty("lotSize")
     private int lotSize;
-
-    @NotEmpty
-    @JsonProperty("buildingType")
-    private String buildingType;
 
 
 
@@ -89,14 +77,6 @@ public class ListingCreateRequest {
         this.numBathrooms = numBathrooms;
     }
 
-    public int getNumRooms() {
-        return numRooms;
-    }
-
-    public void setNumRooms(int numRooms) {
-        this.numRooms = numRooms;
-    }
-
     public String getListingStatus() {
         return listingStatus;
     }
@@ -105,27 +85,11 @@ public class ListingCreateRequest {
         this.listingStatus = listingStatus;
     }
 
-    public String getSchoolDistrict() {
-        return schoolDistrict;
-    }
-
-    public void setSchoolDistrict(String schoolDistrict) {
-        this.schoolDistrict = schoolDistrict;
-    }
-
     public int getLotSize() {
         return lotSize;
     }
 
     public void setLotSize(int lotSize) {
         this.lotSize = lotSize;
-    }
-
-    public String getBuildingType() {
-        return buildingType;
-    }
-
-    public void setBuildingType(String buildingType) {
-        this.buildingType = buildingType;
     }
 }

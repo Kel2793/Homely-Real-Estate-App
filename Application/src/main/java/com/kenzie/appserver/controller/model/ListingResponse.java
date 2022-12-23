@@ -27,20 +27,11 @@ public class ListingResponse {
     @JsonProperty("numBathrooms")
     private double numBathrooms;
 
-    @JsonProperty("numRooms")
-    private int numRooms;
-
     @JsonProperty("listingStatus")
     private String listingStatus;
 
-    @JsonProperty("schoolDistrict")
-    private String schoolDistrict;
-
     @JsonProperty("lotSize")
     private int lotSize;
-
-    @JsonProperty("buildingType")
-    private String buildingType;
 
     public String getListingNumber() {
         return listingNumber;
@@ -90,14 +81,6 @@ public class ListingResponse {
         this.numBathrooms = numBathrooms;
     }
 
-    public int getNumRooms() {
-        return numRooms;
-    }
-
-    public void setNumRooms(int numRooms) {
-        this.numRooms = numRooms;
-    }
-
     public String getListingStatus() {
         return listingStatus;
     }
@@ -106,27 +89,11 @@ public class ListingResponse {
         this.listingStatus = listingStatus;
     }
 
-    public String getSchoolDistrict() {
-        return schoolDistrict;
-    }
-
-    public void setSchoolDistrict(String schoolDistrict) {
-        this.schoolDistrict = schoolDistrict;
-    }
-
     public int getLotSize() {
         return lotSize;
     }
 
     public void setLotSize(int lotSize) {
         this.lotSize = lotSize;
-    }
-
-    public String getBuildingType() {
-        return buildingType;
-    }
-
-    public void setBuildingType(String buildingType) {
-        this.buildingType = buildingType;
     }
 }
