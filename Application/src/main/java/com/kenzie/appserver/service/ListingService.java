@@ -41,22 +41,19 @@ public class ListingService {
 
     }
     public void updatePrice(String listingNumber, int updatedPrice) {
-//        Listing listing = findByListingNumber(listingNumber);
-//        ListingRecord listingRecord = new ListingRecord();
-//
-//        listingRecord.setListingNumber(listing.getListingNumber());
-//        listingRecord.setAddress(listing.getAddress());
-//        listingRecord.setSquareFootage(listing.getSquareFootage());
-//        listingRecord.setPrice(updatedPrice);
-//        listingRecord.setNumBedrooms(listing.getNumBedrooms());
-//        listingRecord.setNumBathrooms(listing.getNumBathrooms());
-//        listingRecord.setNumRooms(listing.getNumRooms());
-//        listingRecord.setListingStatus(listing.getListingStatus());
-//        listingRecord.setSchoolDistrict(listing.getSchoolDistrict());
-//        listingRecord.setLotSize(listing.getLotSize());
-//        listingRecord.setBuildingType(listing.getBuildingType());
-//
-//        listingRepository.save(listingRecord);
+        Listing listing = findByListingNumber(listingNumber);
+        ListingRecord listingRecord = new ListingRecord();
+
+        listingRecord.setListingNumber(listing.getListingNumber());
+        listingRecord.setAddress(listing.getAddress());
+        listingRecord.setSquareFootage(listing.getSquareFootage());
+        listingRecord.setPrice(updatedPrice);
+        listingRecord.setNumBedrooms(listing.getNumBedrooms());
+        listingRecord.setNumBathrooms(listing.getNumBathrooms());
+        listingRecord.setListingStatus(listing.getListingStatus());
+        listingRecord.setLotSize(listing.getLotSize());
+
+        listingRepository.save(listingRecord);
 
     }
 

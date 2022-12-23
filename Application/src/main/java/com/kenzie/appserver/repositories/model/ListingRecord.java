@@ -14,12 +14,8 @@ public class ListingRecord {
     private int price;
     private int numBedrooms;
     private double numBathrooms;
-    private int numRooms;
     private String listingStatus;
-    private String schoolDistrict;
     private int lotSize;
-    private String buildingType;
-
 
     @DynamoDBHashKey(attributeName = "listingNumber")
     public String getListingNumber() {
@@ -51,29 +47,14 @@ public class ListingRecord {
         return numBathrooms;
     }
 
-    @DynamoDBAttribute(attributeName = "numRooms")
-    public int getNumRooms() {
-        return numRooms;
-    }
-
     @DynamoDBAttribute(attributeName = "listingStatus")
     public String getListingStatus() {
         return listingStatus;
     }
 
-    @DynamoDBAttribute(attributeName = "schoolDistrict")
-    public String getSchoolDistrict() {
-        return schoolDistrict;
-    }
-
     @DynamoDBAttribute(attributeName = "lotSize")
     public int getLotSize() {
         return lotSize;
-    }
-
-    @DynamoDBAttribute(attributeName = "buildingType")
-    public String getBuildingType() {
-        return buildingType;
     }
 
     public void setListingNumber(String listingNumber) {
@@ -100,24 +81,12 @@ public class ListingRecord {
         this.numBathrooms = numBathrooms;
     }
 
-    public void setNumRooms(int numRooms) {
-        this.numRooms = numRooms;
-    }
-
     public void setListingStatus(String listingStatus) {
         this.listingStatus = listingStatus;
     }
 
-    public void setSchoolDistrict(String schoolDistrict) {
-        this.schoolDistrict = schoolDistrict;
-    }
-
     public void setLotSize(int lotSize) {
         this.lotSize = lotSize;
-    }
-
-    public void setBuildingType(String buildingType) {
-        this.buildingType = buildingType;
     }
 
     @Override
