@@ -1,5 +1,9 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.repositories.model.ListingRecord;
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+
 public class ListingServiceTest {
     private ListingServiceRepository listingServiceRepository;
     private ListingService listingService;
