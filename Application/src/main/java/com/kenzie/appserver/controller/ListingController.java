@@ -7,6 +7,7 @@ import com.kenzie.appserver.controller.model.UpdateListingPriceRequest;
 import com.kenzie.appserver.controller.model.UpdateListingStatusRequest;
 import com.kenzie.appserver.service.ListingService;
 import com.kenzie.appserver.service.model.Listing;
+import com.kenzie.appserver.service.model.ListingStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,13 +46,22 @@ public class ListingController {
                 listingCreateRequest.getNumBedrooms(), listingCreateRequest.getNumBathrooms(),
                 listingCreateRequest.getLotSize(), listingCreateRequest.getListingStatus());
 
-        listingService.createNewListing(listing);
+        Listing nullCheck = listingService.createNewListing(listing);
+        if (nullCheck == null) {
+            return ResponseEntity.badRequest().build();
+        }
 
         return ResponseEntity.ok(createListingResponse(listing));
     }
 
     @PutMapping("/{price}")
     public ResponseEntity<ListingResponse> updatePrice (@PathVariable("price") int price, @RequestBody UpdateListingPriceRequest updateListingPriceRequest) {
+
+        //check for proper price input
+        //dont do anything if price is less then 1
+        if(updateListingPriceRequest.getPrice() < 1) {
+            return ResponseEntity.badRequest().build();
+        }
 
         listingService.updatePrice(updateListingPriceRequest.getListingNumber(), updateListingPriceRequest.getPrice());
         return (ResponseEntity<ListingResponse>) ResponseEntity.ok();
@@ -61,6 +71,17 @@ public class ListingController {
     @PutMapping("/{listingStatus}")
     public ResponseEntity<ListingResponse> updateStatus (@PathVariable("listingStatus") String listingStatus, @RequestBody UpdateListingStatusRequest updateListingStatusRequest) {
 
+        //check for proper status inputs
+        //do not allow to proceed if status is not allowed
+
+        if(!updateListingStatusRequest.getListingStatus().equalsIgnoreCase(ListingStatus.FOR_SALE.label) ||
+                !updateListingStatusRequest.getListingStatus().equalsIgnoreCase(ListingStatus.WITHDRAWN.label) ||
+                !updateListingStatusRequest.getListingStatus().equalsIgnoreCase(ListingStatus.SOLD.label) ||
+                !updateListingStatusRequest.getListingStatus().equalsIgnoreCase(ListingStatus.UNDER_CONTRACT.label)) {
+           return ResponseEntity.badRequest().build();
+        }
+
+        // else we proceed
         listingService.updateStatus(updateListingStatusRequest.getListingNumber(), updateListingStatusRequest.getListingStatus());
         return (ResponseEntity<ListingResponse>) ResponseEntity.ok();
     }

@@ -1,8 +1,10 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.config.CacheStore;
 import com.kenzie.appserver.repositories.ListingRepository;
 import com.kenzie.appserver.repositories.model.ListingRecord;
 import com.kenzie.appserver.service.model.Listing;
+import com.kenzie.appserver.service.model.ListingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +15,12 @@ import java.util.Optional;
 @Service
 public class ListingService {
     private ListingRepository listingRepository;
+    private CacheStore cache;
 
     @Autowired
-    public ListingService(ListingRepository listingRepository) {
+    public ListingService(ListingRepository listingRepository, CacheStore cache) {
         this.listingRepository = listingRepository;
+        this.cache = cache;
     }
 
     public List<Listing> findAllListings() {
@@ -57,11 +61,21 @@ public class ListingService {
     }
 
     public Listing findByListingNumber(String listingNumber) {
+
+        // Attempts to pull the listing from the cache
+        // Immediately returns if cache is found
+        Listing cachedListing = cache.get(listingNumber);
+        if (cachedListing != null) {
+            return cachedListing;
+        }
+
+        //otherwise use repository
         Optional<ListingRecord> optionalRecord = listingRepository.findById(listingNumber);
 
         if (optionalRecord.isPresent()){
+
             ListingRecord record = optionalRecord.get();
-            return new Listing(record.getListingNumber(),
+            Listing returnedListing = new Listing(record.getListingNumber(),
                     record.getAddress(),
                     record.getSquareFootage(),
                     record.getPrice(),
@@ -69,6 +83,11 @@ public class ListingService {
                     record.getNumBathrooms(),
                     record.getLotSize(),
                     record.getListingStatus());
+
+            // add listing to cache before returning
+            cache.add(record.getListingNumber(), returnedListing);
+
+            return returnedListing;
         } else {
             return null;
         }
@@ -79,6 +98,20 @@ public class ListingService {
     }
 
     public Listing createNewListing(Listing listing) {
+
+        //if status is not one of the ENUMs, return null
+        if(!listing.getListingStatus().equalsIgnoreCase(ListingStatus.FOR_SALE.label) ||
+                !listing.getListingStatus().equalsIgnoreCase(ListingStatus.WITHDRAWN.label) ||
+                !listing.getListingStatus().equalsIgnoreCase(ListingStatus.SOLD.label) ||
+                !listing.getListingStatus().equalsIgnoreCase(ListingStatus.UNDER_CONTRACT.label)) {
+            return null;
+        }
+        //if price is less then 1, invalid price passed, return null;
+        if(listing.getPrice() < 1) {
+            return null;
+        }
+
+        //else build a new listing
         ListingRecord record = new ListingRecord();
         record.setListingNumber(listing.getListingNumber());
         record.setAddress(listing.getAddress());
@@ -110,6 +143,7 @@ public class ListingService {
             listingRecord.setLotSize(listing.getLotSize());
 
             listingRepository.save(listingRecord);
+            cache.evict(listingNumber);
         }
     }
     public void updatePrice(String listingNumber, int updatedPrice) {
@@ -127,11 +161,13 @@ public class ListingService {
             listingRecord.setLotSize(listing.getLotSize());
 
             listingRepository.save(listingRecord);
+            cache.evict(listingNumber);
         }
     }
 
     public void deleteListing(String listingNumber){
         listingRepository.deleteById(listingNumber);
+        cache.evict(listingNumber);
     }
 
 }

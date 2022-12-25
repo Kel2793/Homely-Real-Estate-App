@@ -1,9 +1,11 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.config.CacheStore;
 import com.kenzie.appserver.repositories.ListingRepository;
 import com.kenzie.appserver.repositories.model.ListingRecord;
 import com.kenzie.appserver.service.model.Listing;
-import org.junit.Test;
+import com.kenzie.appserver.service.model.ListingStatus;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.ArgumentCaptor;
@@ -19,10 +21,13 @@ public class ListingServiceTest {
     private ListingRepository listingServiceRepository;
     private ListingService listingService;
 
+    private CacheStore cacheStore;
+
     @BeforeEach
     void setup() {
+        cacheStore = mock(CacheStore.class);
         listingServiceRepository = mock(ListingRepository.class);
-        listingService = new ListingService(listingServiceRepository);
+        listingService = new ListingService(listingServiceRepository, cacheStore);
     }
 
     @Test
