@@ -1,4 +1,4 @@
-package com.kenzie.test;
+package com.kenzie.appserver.service;
 
 public class ListingServiceTest {
     private ListingServiceRepository listingServiceRepository;
