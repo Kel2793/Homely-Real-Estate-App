@@ -96,39 +96,42 @@ public class ListingService {
     }
 
     public void updateStatus(String listingNumber, String updatedListingStatus) {
-        Listing listing = findByListingNumber(listingNumber);
-        ListingRecord listingRecord = new ListingRecord();
+        if (listingRepository.existsById(listingNumber)) {
+            Listing listing = findByListingNumber(listingNumber);
+            ListingRecord listingRecord = new ListingRecord();
 
-        listingRecord.setListingNumber(listing.getListingNumber());
-        listingRecord.setAddress(listing.getAddress());
-        listingRecord.setSquareFootage(listing.getSquareFootage());
-        listingRecord.setPrice(listing.getPrice());
-        listingRecord.setNumBedrooms(listing.getNumBedrooms());
-        listingRecord.setNumBathrooms(listing.getNumBathrooms());
-        listingRecord.setListingStatus(updatedListingStatus);
-        listingRecord.setLotSize(listing.getLotSize());
+            listingRecord.setListingNumber(listing.getListingNumber());
+            listingRecord.setAddress(listing.getAddress());
+            listingRecord.setSquareFootage(listing.getSquareFootage());
+            listingRecord.setPrice(listing.getPrice());
+            listingRecord.setNumBedrooms(listing.getNumBedrooms());
+            listingRecord.setNumBathrooms(listing.getNumBathrooms());
+            listingRecord.setListingStatus(updatedListingStatus);
+            listingRecord.setLotSize(listing.getLotSize());
 
-        listingRepository.save(listingRecord);
+            listingRepository.save(listingRecord);
+        }
     }
     public void updatePrice(String listingNumber, int updatedPrice) {
-        Listing listing = findByListingNumber(listingNumber);
-        ListingRecord listingRecord = new ListingRecord();
+        if (listingRepository.existsById(listingNumber)) {
+            Listing listing = findByListingNumber(listingNumber);
+            ListingRecord listingRecord = new ListingRecord();
 
-        listingRecord.setListingNumber(listing.getListingNumber());
-        listingRecord.setAddress(listing.getAddress());
-        listingRecord.setSquareFootage(listing.getSquareFootage());
-        listingRecord.setPrice(updatedPrice);
-        listingRecord.setNumBedrooms(listing.getNumBedrooms());
-        listingRecord.setNumBathrooms(listing.getNumBathrooms());
-        listingRecord.setListingStatus(listing.getListingStatus());
-        listingRecord.setLotSize(listing.getLotSize());
+            listingRecord.setListingNumber(listing.getListingNumber());
+            listingRecord.setAddress(listing.getAddress());
+            listingRecord.setSquareFootage(listing.getSquareFootage());
+            listingRecord.setPrice(updatedPrice);
+            listingRecord.setNumBedrooms(listing.getNumBedrooms());
+            listingRecord.setNumBathrooms(listing.getNumBathrooms());
+            listingRecord.setListingStatus(listing.getListingStatus());
+            listingRecord.setLotSize(listing.getLotSize());
 
-        listingRepository.save(listingRecord);
-
+            listingRepository.save(listingRecord);
+        }
     }
 
     public void deleteListing(String listingNumber){
-        listingRepository.delete(listingRepository.findById(listingNumber).get());
+        listingRepository.deleteById(listingNumber);
     }
 
 }
