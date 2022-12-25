@@ -12,3 +12,6 @@ include(':Frontend')
 include(':Application')
 include(':Utilities')
 include(':IntegrationTests')
+include 'Application:src:Tests'
+findProject(':Application:src:Tests')?.name = 'Tests'
+
