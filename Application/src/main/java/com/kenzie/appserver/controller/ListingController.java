@@ -123,7 +123,7 @@ public class ListingController {
                                                                           @RequestParam(name = "price") int price,
                                                                           @RequestParam(name = "numBedrooms") int numBedrooms,
                                                                           @RequestParam(name = "numBathrooms") int numBathrooms,
-                                                                          @RequestParam(name = "lotSize") int lotSize) {
+                                                                          @RequestParam(name = "lotSize") double lotSize) {
 
         List<Listing> parameterizedListings = listingService.findParameterizedListings(squareFootage, price, numBedrooms, numBathrooms, lotSize);
 

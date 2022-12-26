@@ -93,7 +93,7 @@ public class ListingService {
         }
     }
 
-    public List<Listing> findParameterizedListings(int squareFootage, int price, int numBedrooms, int numBathrooms, int lotSize) {
+    public List<Listing> findParameterizedListings(int squareFootage, int price, int numBedrooms, int numBathrooms, double lotSize) {
         return null;
     }
 
