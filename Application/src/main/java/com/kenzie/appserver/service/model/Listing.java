@@ -11,10 +11,10 @@ public class Listing {
     private final int numBedrooms;
     private final double numBathrooms;
     private final String listingStatus;
-    private final int lotSize;
+    private final double lotSize;
 
     public Listing(String listingNumber, String address, int squareFootage, int price, int numBedrooms, double numBathrooms,
-                   int lotSize, String listingStatus) {
+                   double lotSize, String listingStatus) {
         this.listingNumber = listingNumber;
         this.address = address;
         this.squareFootage = squareFootage;
@@ -53,7 +53,7 @@ public class Listing {
         return listingStatus;
     }
 
-    public int getLotSize() {
+    public double getLotSize() {
         return lotSize;
     }
 }

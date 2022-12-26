@@ -15,7 +15,7 @@ public class ListingRecord {
     private int numBedrooms;
     private double numBathrooms;
     private String listingStatus;
-    private int lotSize;
+    private double lotSize;
 
     @DynamoDBHashKey(attributeName = "listingNumber")
     public String getListingNumber() {
@@ -53,7 +53,7 @@ public class ListingRecord {
     }
 
     @DynamoDBAttribute(attributeName = "lotSize")
-    public int getLotSize() {
+    public double getLotSize() {
         return lotSize;
     }
 
@@ -85,7 +85,7 @@ public class ListingRecord {
         this.listingStatus = listingStatus;
     }
 
-    public void setLotSize(int lotSize) {
+    public void setLotSize(double lotSize) {
         this.lotSize = lotSize;
     }
 

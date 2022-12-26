@@ -31,7 +31,7 @@ public class ListingResponse {
     private String listingStatus;
 
     @JsonProperty("lotSize")
-    private int lotSize;
+    private double lotSize;
 
     public String getListingNumber() {
         return listingNumber;
@@ -89,11 +89,11 @@ public class ListingResponse {
         this.listingStatus = listingStatus;
     }
 
-    public int getLotSize() {
+    public double getLotSize() {
         return lotSize;
     }
 
-    public void setLotSize(int lotSize) {
+    public void setLotSize(double lotSize) {
         this.lotSize = lotSize;
     }
 }

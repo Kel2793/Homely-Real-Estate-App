@@ -33,7 +33,7 @@ public class ListingCreateRequest {
 
     @Min(0)
     @JsonProperty("lotSize")
-    private int lotSize;
+    private double lotSize;
 
 
 
@@ -85,11 +85,11 @@ public class ListingCreateRequest {
         this.listingStatus = listingStatus;
     }
 
-    public int getLotSize() {
+    public double getLotSize() {
         return lotSize;
     }
 
-    public void setLotSize(int lotSize) {
+    public void setLotSize(double lotSize) {
         this.lotSize = lotSize;
     }
 }
