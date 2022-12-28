@@ -106,7 +106,7 @@ public class ListingService {
                 !listing.getListingStatus().equalsIgnoreCase(ListingStatus.UNDER_CONTRACT.label)) {
             return null;
         }
-        //if price is less then 1, invalid price passed, return null;
+        //if price is less than 1, invalid price passed, return null;
         if(listing.getPrice() < 1) {
             return null;
         }
