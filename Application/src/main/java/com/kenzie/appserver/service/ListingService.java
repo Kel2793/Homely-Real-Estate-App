@@ -100,9 +100,9 @@ public class ListingService {
     public Listing createNewListing(Listing listing) {
 
         //if status is not one of the ENUMs, return null
-        if(!listing.getListingStatus().equalsIgnoreCase(ListingStatus.FOR_SALE.label) ||
-                !listing.getListingStatus().equalsIgnoreCase(ListingStatus.WITHDRAWN.label) ||
-                !listing.getListingStatus().equalsIgnoreCase(ListingStatus.SOLD.label) ||
+        if(!listing.getListingStatus().equalsIgnoreCase(ListingStatus.FOR_SALE.label) &&
+                !listing.getListingStatus().equalsIgnoreCase(ListingStatus.WITHDRAWN.label) &&
+                !listing.getListingStatus().equalsIgnoreCase(ListingStatus.SOLD.label) &&
                 !listing.getListingStatus().equalsIgnoreCase(ListingStatus.UNDER_CONTRACT.label)) {
             return null;
         }

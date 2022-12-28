@@ -47,25 +47,9 @@ public class ListingServiceTest {
                 3,
                 "For sale");
 
-        ListingRecord record1 = new ListingRecord();
-        record1.setListingNumber(listing1.getListingNumber());
-        record1.setAddress(listing1.getAddress());
-        record1.setSquareFootage(listing1.getSquareFootage());
-        record1.setPrice(listing1.getPrice());
-        record1.setNumBedrooms(listing1.getNumBedrooms());
-        record1.setNumBathrooms(listing1.getNumBathrooms());
-        record1.setLotSize(listing1.getLotSize());
-        record1.setListingStatus(listing1.getListingStatus());
+        ListingRecord record1 = createListingRecord(listing1);
 
-        ListingRecord record2 = new ListingRecord();
-        record2.setListingNumber(listing2.getListingNumber());
-        record2.setAddress(listing2.getAddress());
-        record2.setSquareFootage(listing2.getSquareFootage());
-        record2.setPrice(listing2.getPrice());
-        record2.setNumBedrooms(listing2.getNumBedrooms());
-        record2.setNumBathrooms(listing2.getNumBathrooms());
-        record2.setLotSize(listing2.getLotSize());
-        record2.setListingStatus(listing2.getListingStatus());
+        ListingRecord record2 = createListingRecord(listing2);
 
         List<ListingRecord> records = new ArrayList<>();
         records.add(record1);
@@ -115,15 +99,7 @@ public class ListingServiceTest {
                 1,
                 "For sale");
 
-        ListingRecord record = new ListingRecord();
-        record.setListingNumber(listingNumber);
-        record.setAddress(listing.getAddress());
-        record.setSquareFootage(listing.getSquareFootage());
-        record.setPrice(listing.getPrice());
-        record.setNumBedrooms(listing.getNumBedrooms());
-        record.setNumBathrooms(listing.getNumBathrooms());
-        record.setLotSize(listing.getLotSize());
-        record.setListingStatus(listing.getListingStatus());
+        ListingRecord record = createListingRecord(listing);
 
         Optional<ListingRecord> optionalRecords = Optional.of(record);
 
@@ -140,6 +116,36 @@ public class ListingServiceTest {
         Assertions.assertEquals(listing.getNumBathrooms(), actualListing.getNumBathrooms());
         Assertions.assertEquals(listing.getLotSize(), actualListing.getLotSize());
         Assertions.assertEquals(listing.getListingStatus(), actualListing.getListingStatus());
+    }
+
+    @Test
+    public void findByListingNumber_cacheIsUsed() {
+        String listingNumber = UUID.randomUUID().toString();
+
+        Listing listing = new Listing(
+                listingNumber,
+                "123 Test St, City, State, 00000",
+                2200,
+                300000,
+                4,
+                2.5,
+                1,
+                "For sale");
+
+        when(cacheStore.get(listingNumber)).thenReturn(listing);
+
+        Listing actualListing = listingService.findByListingNumber(listingNumber);
+
+        Assertions.assertNotNull(actualListing, "Listing should not be null");
+        Assertions.assertEquals(listing.getListingNumber(), actualListing.getListingNumber());
+        Assertions.assertEquals(listing.getAddress(), actualListing.getAddress());
+        Assertions.assertEquals(listing.getSquareFootage(), actualListing.getSquareFootage());
+        Assertions.assertEquals(listing.getPrice(), actualListing.getPrice());
+        Assertions.assertEquals(listing.getNumBedrooms(), actualListing.getNumBedrooms());
+        Assertions.assertEquals(listing.getNumBathrooms(), actualListing.getNumBathrooms());
+        Assertions.assertEquals(listing.getLotSize(), actualListing.getLotSize());
+        Assertions.assertEquals(listing.getListingStatus(), actualListing.getListingStatus());
+
     }
 
     @Test
@@ -185,25 +191,9 @@ public class ListingServiceTest {
                 3,
                 "Closed");
 
-        ListingRecord record1 = new ListingRecord();
-        record1.setListingNumber(listing1.getListingNumber());
-        record1.setAddress(listing1.getAddress());
-        record1.setSquareFootage(listing1.getSquareFootage());
-        record1.setPrice(listing1.getPrice());
-        record1.setNumBedrooms(listing1.getNumBedrooms());
-        record1.setNumBathrooms(listing1.getNumBathrooms());
-        record1.setLotSize(listing1.getLotSize());
-        record1.setListingStatus(listing1.getListingStatus());
+        ListingRecord record1 = createListingRecord(listing1);
 
-        ListingRecord record2 = new ListingRecord();
-        record2.setListingNumber(listing2.getListingNumber());
-        record2.setAddress(listing2.getAddress());
-        record2.setSquareFootage(listing2.getSquareFootage());
-        record2.setPrice(listing2.getPrice());
-        record2.setNumBedrooms(listing2.getNumBedrooms());
-        record2.setNumBathrooms(listing2.getNumBathrooms());
-        record2.setLotSize(listing2.getLotSize());
-        record2.setListingStatus(listing2.getListingStatus());
+        ListingRecord record2 = createListingRecord(listing2);
 
         List<ListingRecord> records = new ArrayList<>();
         records.add(record1);
@@ -226,7 +216,7 @@ public class ListingServiceTest {
     }
 
     @Test
-    void createNewListing() {
+    void createNewListing_forSaleStatus_createsListing() {
         Listing listing = new Listing(UUID.randomUUID().toString(),
                 "111 Test St., City, State, 11111",
                 1900,
@@ -234,7 +224,73 @@ public class ListingServiceTest {
                 5,
                 4,
                 1.75,
-                "For sale");
+                ListingStatus.FOR_SALE.label);
+
+        Listing actual = listingService.createNewListing(listing);
+
+        Assertions.assertNotNull(actual, "Listing should not be null");
+        Assertions.assertEquals(listing.getListingNumber(), actual.getListingNumber());
+        Assertions.assertEquals(listing.getAddress(), actual.getAddress());
+        Assertions.assertEquals(listing.getPrice(), actual.getPrice());
+        Assertions.assertEquals(listing.getNumBedrooms(), actual.getNumBedrooms());
+        Assertions.assertEquals(listing.getLotSize(), actual.getLotSize());
+        Assertions.assertEquals(listing.getListingStatus(), actual.getListingStatus());
+    }
+
+    @Test
+    void createNewListing_forWithdrawnStatus_createsListing() {
+        Listing listing = new Listing(UUID.randomUUID().toString(),
+                "111 Test St., City, State, 11111",
+                1900,
+                450000,
+                5,
+                4,
+                1.75,
+                ListingStatus.WITHDRAWN.label);
+
+        Listing actual = listingService.createNewListing(listing);
+
+        Assertions.assertNotNull(actual, "Listing should not be null");
+        Assertions.assertEquals(listing.getListingNumber(), actual.getListingNumber());
+        Assertions.assertEquals(listing.getAddress(), actual.getAddress());
+        Assertions.assertEquals(listing.getPrice(), actual.getPrice());
+        Assertions.assertEquals(listing.getNumBedrooms(), actual.getNumBedrooms());
+        Assertions.assertEquals(listing.getLotSize(), actual.getLotSize());
+        Assertions.assertEquals(listing.getListingStatus(), actual.getListingStatus());
+    }
+
+    @Test
+    void createNewListing_forSoldStatus_createsListing() {
+        Listing listing = new Listing(UUID.randomUUID().toString(),
+                "111 Test St., City, State, 11111",
+                1900,
+                450000,
+                5,
+                4,
+                1.75,
+                ListingStatus.SOLD.label);
+
+        Listing actual = listingService.createNewListing(listing);
+
+        Assertions.assertNotNull(actual, "Listing should not be null");
+        Assertions.assertEquals(listing.getListingNumber(), actual.getListingNumber());
+        Assertions.assertEquals(listing.getAddress(), actual.getAddress());
+        Assertions.assertEquals(listing.getPrice(), actual.getPrice());
+        Assertions.assertEquals(listing.getNumBedrooms(), actual.getNumBedrooms());
+        Assertions.assertEquals(listing.getLotSize(), actual.getLotSize());
+        Assertions.assertEquals(listing.getListingStatus(), actual.getListingStatus());
+    }
+
+    @Test
+    void createNewListing_forUnderContractStatus_createsListing() {
+        Listing listing = new Listing(UUID.randomUUID().toString(),
+                "111 Test St., City, State, 11111",
+                1900,
+                450000,
+                5,
+                4,
+                1.75,
+                ListingStatus.UNDER_CONTRACT.label);
 
         Listing actual = listingService.createNewListing(listing);
 
@@ -292,16 +348,7 @@ public class ListingServiceTest {
                 1,
                 "For sale");
 
-        //ListingRecord record1 = createListingRecord(listing);
-        ListingRecord record = new ListingRecord();
-        record.setListingNumber(listingNumber);
-        record.setAddress(listing.getAddress());
-        record.setSquareFootage(listing.getSquareFootage());
-        record.setPrice(listing.getPrice());
-        record.setNumBedrooms(listing.getNumBedrooms());
-        record.setNumBathrooms(listing.getNumBathrooms());
-        record.setLotSize(listing.getLotSize());
-        record.setListingStatus(listing.getListingStatus());
+        ListingRecord record = createListingRecord(listing);
 
         Optional<ListingRecord> optionalRecords = Optional.of(record);
 
@@ -338,15 +385,7 @@ public class ListingServiceTest {
                 1,
                 "For sale");
 
-        ListingRecord record = new ListingRecord();
-        record.setListingNumber(listingNumber);
-        record.setAddress(listing.getAddress());
-        record.setSquareFootage(listing.getSquareFootage());
-        record.setPrice(listing.getPrice());
-        record.setNumBedrooms(listing.getNumBedrooms());
-        record.setNumBathrooms(listing.getNumBathrooms());
-        record.setLotSize(listing.getLotSize());
-        record.setListingStatus(listing.getListingStatus());
+        ListingRecord record = createListingRecord(listing);
 
         Optional<ListingRecord> optionalRecords = Optional.of(record);
 
@@ -384,15 +423,7 @@ public class ListingServiceTest {
                 1,
                 "For sale");
 
-        ListingRecord record = new ListingRecord();
-        record.setListingNumber(listingNumber);
-        record.setAddress(listing.getAddress());
-        record.setSquareFootage(listing.getSquareFootage());
-        record.setPrice(listing.getPrice());
-        record.setNumBedrooms(listing.getNumBedrooms());
-        record.setNumBathrooms(listing.getNumBathrooms());
-        record.setLotSize(listing.getLotSize());
-        record.setListingStatus(listing.getListingStatus());
+        ListingRecord record = createListingRecord(listing);
 
         when(listingServiceRepository.existsById(listingNumber)).thenReturn(false);
 
@@ -414,15 +445,7 @@ public class ListingServiceTest {
                 2.4,
                 "For sale");
 
-        ListingRecord record = new ListingRecord();
-        record.setListingNumber(listingNumber);
-        record.setAddress(listing.getAddress());
-        record.setSquareFootage(listing.getSquareFootage());
-        record.setPrice(listing.getPrice());
-        record.setNumBedrooms(listing.getNumBedrooms());
-        record.setNumBathrooms(listing.getNumBathrooms());
-        record.setLotSize(listing.getLotSize());
-        record.setListingStatus(listing.getListingStatus());
+        ListingRecord record = createListingRecord(listing);
 
         when(listingServiceRepository.existsById(listingNumber)).thenReturn(false);
 
