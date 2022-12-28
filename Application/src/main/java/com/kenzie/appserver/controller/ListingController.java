@@ -74,9 +74,9 @@ public class ListingController {
         //check for proper status inputs
         //do not allow to proceed if status is not allowed
 
-        if(!updateListingStatusRequest.getListingStatus().equalsIgnoreCase(ListingStatus.FOR_SALE.label) ||
-                !updateListingStatusRequest.getListingStatus().equalsIgnoreCase(ListingStatus.WITHDRAWN.label) ||
-                !updateListingStatusRequest.getListingStatus().equalsIgnoreCase(ListingStatus.SOLD.label) ||
+        if(!updateListingStatusRequest.getListingStatus().equalsIgnoreCase(ListingStatus.FOR_SALE.label) &&
+                !updateListingStatusRequest.getListingStatus().equalsIgnoreCase(ListingStatus.WITHDRAWN.label) &&
+                !updateListingStatusRequest.getListingStatus().equalsIgnoreCase(ListingStatus.SOLD.label) &&
                 !updateListingStatusRequest.getListingStatus().equalsIgnoreCase(ListingStatus.UNDER_CONTRACT.label)) {
            return ResponseEntity.badRequest().build();
         }
