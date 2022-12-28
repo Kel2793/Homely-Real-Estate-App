@@ -292,6 +292,7 @@ public class ListingServiceTest {
                 1,
                 "For sale");
 
+        //ListingRecord record1 = createListingRecord(listing);
         ListingRecord record = new ListingRecord();
         record.setListingNumber(listingNumber);
         record.setAddress(listing.getAddress());
@@ -447,5 +448,19 @@ public class ListingServiceTest {
         listingService.deleteListing(listingNumber);
 
         verify(listingServiceRepository).deleteById(listingNumber);
+    }
+
+    public ListingRecord createListingRecord(Listing listing) {
+        ListingRecord record = new ListingRecord();
+        record.setListingNumber(listing.getListingNumber());
+        record.setAddress(listing.getAddress());
+        record.setSquareFootage(listing.getSquareFootage());
+        record.setPrice(listing.getPrice());
+        record.setNumBedrooms(listing.getNumBedrooms());
+        record.setNumBathrooms(listing.getNumBathrooms());
+        record.setLotSize(listing.getLotSize());
+        record.setListingStatus(listing.getListingStatus());
+
+        return record;
     }
 }
