@@ -143,6 +143,29 @@ public class ListingServiceTest {
     }
 
     @Test
+    void findByListingNumber_optionalRecordNotPresent_returnsNull(){
+        String listingNumber = UUID.randomUUID().toString();
+
+        Listing listing = new Listing(
+                listingNumber,
+                "123 Test St, City, State, 00000",
+                2500,
+                750000,
+                5,
+                3.5,
+                0.5,
+                "For sale");
+
+        Optional<ListingRecord> optionalRecords = Optional.empty();
+
+        when(listingServiceRepository.findById(listingNumber)).thenReturn(optionalRecords);
+
+        Listing actual = listingService.findByListingNumber(listingNumber);
+
+        Assertions.assertNull(actual);
+    }
+
+    @Test
     void findAllOpenListings() {
         Listing listing1 = new Listing(UUID.randomUUID().toString(),
                 "123 Main St, City, State 11111",
@@ -210,7 +233,7 @@ public class ListingServiceTest {
                 450000,
                 5,
                 4,
-                5,
+                1.75,
                 "For sale");
 
         Listing actual = listingService.createNewListing(listing);
@@ -222,6 +245,38 @@ public class ListingServiceTest {
         Assertions.assertEquals(listing.getNumBedrooms(), actual.getNumBedrooms());
         Assertions.assertEquals(listing.getLotSize(), actual.getLotSize());
         Assertions.assertEquals(listing.getListingStatus(), actual.getListingStatus());
+    }
+
+    @Test
+    void createListing_invalidStatus_returnsNull(){
+        Listing listing = new Listing(UUID.randomUUID().toString(),
+                "111 Test St., City, State, 11111",
+                1675,
+                199000,
+                2,
+                2,
+                5.5,
+                "Not a status!");
+
+        Listing actual = listingService.createNewListing(listing);
+
+        Assertions.assertNull(actual);
+    }
+
+    @Test
+    void createListing_invalidPrice_returnsNull(){
+        Listing listing = new Listing(UUID.randomUUID().toString(),
+                "111 Test St., City, State, 11111",
+                1375,
+                0,
+                2,
+                2,
+                0.25,
+                "For sale");
+
+        Listing actual = listingService.createNewListing(listing);
+
+        Assertions.assertNull(actual);
     }
 
     @Test
@@ -313,6 +368,66 @@ public class ListingServiceTest {
         Assertions.assertEquals(listing.getNumBathrooms(), record1.getNumBathrooms());
         Assertions.assertEquals(listing.getLotSize(), record1.getLotSize());
         Assertions.assertEquals("Closed", record1.getListingStatus());
+    }
+
+    @Test
+    void updateStatus_doesNotExistById_doesNothing(){
+        String listingNumber = UUID.randomUUID().toString();
+
+        Listing listing = new Listing(listingNumber,
+                "123 Test Drive, City, State, 10101",
+                2500,
+                600000,
+                5,
+                4,
+                1,
+                "For sale");
+
+        ListingRecord record = new ListingRecord();
+        record.setListingNumber(listingNumber);
+        record.setAddress(listing.getAddress());
+        record.setSquareFootage(listing.getSquareFootage());
+        record.setPrice(listing.getPrice());
+        record.setNumBedrooms(listing.getNumBedrooms());
+        record.setNumBathrooms(listing.getNumBathrooms());
+        record.setLotSize(listing.getLotSize());
+        record.setListingStatus(listing.getListingStatus());
+
+        when(listingServiceRepository.existsById(listingNumber)).thenReturn(false);
+
+        listingService.updateStatus(listingNumber, "Closed");
+
+        Assertions.assertEquals("For sale", listing.getListingStatus());
+    }
+
+    @Test
+    void updatePrice_doesNotExistById_doesNothing(){
+        String listingNumber = UUID.randomUUID().toString();
+
+        Listing listing = new Listing(listingNumber,
+                "123 Test Drive, City, State, 10101",
+                2300,
+                389900,
+                3,
+                4,
+                2.4,
+                "For sale");
+
+        ListingRecord record = new ListingRecord();
+        record.setListingNumber(listingNumber);
+        record.setAddress(listing.getAddress());
+        record.setSquareFootage(listing.getSquareFootage());
+        record.setPrice(listing.getPrice());
+        record.setNumBedrooms(listing.getNumBedrooms());
+        record.setNumBathrooms(listing.getNumBathrooms());
+        record.setLotSize(listing.getLotSize());
+        record.setListingStatus(listing.getListingStatus());
+
+        when(listingServiceRepository.existsById(listingNumber)).thenReturn(false);
+
+        listingService.updatePrice(listingNumber, 375000);
+
+        Assertions.assertEquals(389900, listing.getPrice());
     }
 
     @Test
