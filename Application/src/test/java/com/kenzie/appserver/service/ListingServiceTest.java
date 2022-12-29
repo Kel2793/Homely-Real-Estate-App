@@ -489,12 +489,12 @@ public class ListingServiceTest {
         return record;
     }
 
-    @Test
-    void generateListing() {
-        ListingGenerator generator = new ListingGenerator();
-        System.out.println(generator.generateListing());
-
-        CacheStore store = new CacheStore(200, TimeUnit.SECONDS);
-
-    }
+//    @Test
+//    void generateListing() {
+//        ListingGenerator generator = new ListingGenerator();
+//        for (int i = 0; i < 10; i++) {
+//            System.out.println(generator.generateListing());
+//            System.out.println("\n");
+//        }
+//    }
 }

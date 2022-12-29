@@ -85,7 +85,7 @@ public class ListingGenerator {
         String cityName = mock.cities().us().get();
         String stateName = mock.usStates().get();
         DecimalFormat format = new DecimalFormat("00000");
-        int zipCode = random.nextInt(10000);
+        int zipCode = random.nextInt(100000);
         String zipString = (format.format(zipCode));
 
         sb.append(houseNumberString).append(" ");
@@ -96,6 +96,7 @@ public class ListingGenerator {
         sb.append(zipString);
 
         String finalAddress = sb.toString();
+        sb.setLength(0);
 
         int squareFootage = random.nextInt((10000 - 500)) + 500;
         int price = random.nextInt(1500000);
