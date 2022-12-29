@@ -1,6 +1,7 @@
 package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.config.CacheStore;
+import com.kenzie.appserver.config.ListingGenerator;
 import com.kenzie.appserver.repositories.ListingRepository;
 import com.kenzie.appserver.repositories.model.ListingRecord;
 import com.kenzie.appserver.service.model.Listing;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.mockito.ArgumentCaptor;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Mockito.*;
 
@@ -485,5 +487,14 @@ public class ListingServiceTest {
         record.setListingStatus(listing.getListingStatus());
 
         return record;
+    }
+
+    @Test
+    void generateListing() {
+        ListingGenerator generator = new ListingGenerator();
+        System.out.println(generator.generateListing());
+
+        CacheStore store = new CacheStore(200, TimeUnit.SECONDS);
+
     }
 }

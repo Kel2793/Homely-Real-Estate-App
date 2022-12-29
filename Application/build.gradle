@@ -13,8 +13,10 @@ checkstyle {
 }
 
 dependencies {
+    implementation 'net.andreinc:mockneat:0.4.8'
     implementation 'org.springframework.boot:spring-boot-starter:2.6.3'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.6.3'
+    implementation 'com.github.thiagokimo:faker:1.4.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.3'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.6.3'
 

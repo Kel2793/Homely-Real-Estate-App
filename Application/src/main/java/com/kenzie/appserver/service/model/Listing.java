@@ -56,4 +56,18 @@ public class Listing {
     public double getLotSize() {
         return lotSize;
     }
+
+    @Override
+    public String toString() {
+        return "Listing{" +
+                "listingNumber='" + listingNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", squareFootage=" + squareFootage +
+                ", price=" + price +
+                ", numBedrooms=" + numBedrooms +
+                ", numBathrooms=" + numBathrooms +
+                ", listingStatus='" + listingStatus + '\'' +
+                ", lotSize=" + lotSize +
+                '}';
+    }
 }
