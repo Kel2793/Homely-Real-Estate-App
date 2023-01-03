@@ -16,8 +16,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -56,13 +58,13 @@ class ListingControllerTest {
         }
     }
 
-    @AfterAll
-    public void cleanUp() {
-        System.out.println("After All cleanUp() method called");
-        for (Listing listing : newListings) {
-            listingService.deleteListing(listing.getListingNumber());
-        }
-    }
+//    @AfterAll
+//    public void cleanUp() {
+//        System.out.println("After All cleanUp() method called");
+//        for (Listing listing : newListings) {
+//            listingService.deleteListing(listing.getListingNumber());
+//        }
+//    }
 
     @Test
     public void getAllListings_successful() throws Exception {
@@ -247,4 +249,41 @@ class ListingControllerTest {
         assertThat(parameterizedListingsResponseList.get(0).getLotSize()).isLessThan(lotSize);
     }
 
+    @Test
+    public void getListingById_ReturnsProperListing() throws Exception {
+        Listing listing = listingGenerator.generateListing();
+        String id = listing.getListingNumber();
+        String address = listing.getAddress();
+        int price = listing.getPrice();
+        int squareFootage = listing.getSquareFootage();
+        int numBedrooms = listing.getNumBedrooms();
+        double numBathrooms = listing.getNumBathrooms();
+        double lotSize = listing.getLotSize();
+        String status = listing.getListingStatus();
+
+        Listing persistedListing = listingService.createNewListing(listing);
+
+        // WHEN
+        mvc.perform(get("/listing/{listingNumber}", persistedListing.getListingNumber())
+                        .accept(MediaType.APPLICATION_JSON))
+                // THEN
+                .andExpect(jsonPath("listingNumber")
+                        .value(is(id)))
+                .andExpect(jsonPath("address")
+                        .value(is(address)))
+                .andExpect(jsonPath("price")
+                        .value(is(price)))
+                .andExpect(jsonPath("squareFootage")
+                        .value(is(squareFootage)))
+                .andExpect(jsonPath("numBedrooms")
+                        .value(is(numBedrooms)))
+                .andExpect(jsonPath("numBathrooms")
+                        .value(is(numBathrooms)))
+                .andExpect(jsonPath("lotSize")
+                        .value(is(lotSize)))
+                .andExpect(jsonPath("listingStatus")
+                        .value(is(status)))
+                .andExpect(status().isOk());
+    }
 }
+
