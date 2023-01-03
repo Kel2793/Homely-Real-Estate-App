@@ -93,8 +93,47 @@ public class ListingService {
         }
     }
 
-    public List<Listing> findParameterizedListings(int squareFootage, int price, int numBedrooms, int numBathrooms, double lotSize) {
-        return null;
+    public List<Listing> findParameterizedListings(int squareFootage, int price, int numBedrooms, double lotSize) {
+        List<Listing> parameterizedListings = new ArrayList<>();
+        Iterable<ListingRecord> listingIterator = null;
+
+        //Only the squareFootage field has valid data
+        if (squareFootage != 0 && price == 0 && numBedrooms == 0 && lotSize == 0.0) {
+
+            listingIterator = listingRepository.findBySquareFootageLessThan(squareFootage);
+        }
+
+        //Only the price field has valid data
+        if (squareFootage == 0 && price != 0 && numBedrooms == 0 && lotSize == 0.0) {
+
+            listingIterator = listingRepository.findByPriceLessThan(price);
+        }
+
+        //Only the numBedrooms field has valid data
+        if (squareFootage == 0 && price == 0 && numBedrooms != 0 && lotSize == 0.0) {
+
+            listingIterator = listingRepository.findByNumBedroomsEquals(numBedrooms);
+        }
+
+        //Only the lotSize field has valid data
+        if (squareFootage == 0 && price == 0 && numBedrooms == 0 && lotSize != 0.0) {
+
+            listingIterator = listingRepository.findByLotSizeEquals(lotSize);
+        }
+
+        assert listingIterator != null;
+        for(ListingRecord listingRecord : listingIterator){
+            parameterizedListings.add(new Listing(listingRecord.getListingNumber(),
+                    listingRecord.getAddress(),
+                    listingRecord.getSquareFootage(),
+                    listingRecord.getPrice(),
+                    listingRecord.getNumBedrooms(),
+                    listingRecord.getNumBathrooms(),
+                    listingRecord.getLotSize(),
+                    listingRecord.getListingStatus()));
+        }
+
+        return parameterizedListings;
     }
 
     public Listing createNewListing(Listing listing) {

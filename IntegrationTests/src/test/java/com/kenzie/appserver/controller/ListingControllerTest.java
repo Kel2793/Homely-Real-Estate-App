@@ -10,7 +10,6 @@ import com.kenzie.appserver.controller.model.ListingCreateRequest;
 import com.kenzie.appserver.controller.model.ListingResponse;
 import com.kenzie.appserver.service.ListingService;
 import com.kenzie.appserver.service.model.Listing;
-import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -155,6 +154,74 @@ class ListingControllerTest {
         List<ListingResponse> openListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
         assertThat(openListingsResponseList).isNotEmpty().hasSizeGreaterThan(0);
         assertThat(openListingsResponseList.get(0).getListingStatus()).isEqualToIgnoringCase("For Sale");
+    }
+
+    @Test
+    public void getParameterizedListings_byPriceLessThan_givenPrice_successful() throws Exception {
+        // GIVEN
+        // Already created newListings in setup()
+        int price = 400000;
+
+        // WHEN
+        MvcResult byPriceLessThanListingsResult =  mvc.perform(get("/listing/query?squareFootage=0&price=400000&numBedrooms=0&lotSize=0.0")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        // THEN
+        String response = byPriceLessThanListingsResult.getResponse().getContentAsString();
+        List<ListingResponse> byPriceLessThanListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
+        assertThat(byPriceLessThanListingsResponseList.get(0).getPrice()).isLessThan(price);
+    }
+
+    @Test
+    public void getParameterizedListings_bySquareFootageLessThan_givenSquareFootage_successful() throws Exception {
+        // GIVEN
+        // Already created newListings in setup()
+        int squareFootage = 2000;
+
+        // WHEN
+        MvcResult bySquareFootageLessThanListingsResult =  mvc.perform(get("/listing/query?squareFootage=2000&price=0&numBedrooms=0&lotSize=0.0")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        // THEN
+        String response = bySquareFootageLessThanListingsResult.getResponse().getContentAsString();
+        List<ListingResponse> bySquareFootageLessThanListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
+        assertThat(bySquareFootageLessThanListingsResponseList.get(0).getSquareFootage()).isLessThan(squareFootage);
+    }
+
+    @Test
+    public void getParameterizedListings_byNumOfBedroomsEquals_givenNumOfBedrooms_successful() throws Exception {
+        // GIVEN
+        // Already created newListings in setup()
+        int numBedrooms = 3;
+
+        // WHEN
+        MvcResult byNumOfBedroomsEqualsListingsResult =  mvc.perform(get("/listing/query?squareFootage=0&price=0&numBedrooms=3&lotSize=0.0")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        // THEN
+        String response = byNumOfBedroomsEqualsListingsResult.getResponse().getContentAsString();
+        List<ListingResponse> byNumOfBedroomsEqualsListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
+        assertThat(byNumOfBedroomsEqualsListingsResponseList.get(0).getNumBedrooms()).isEqualTo(numBedrooms);
+    }
+
+    @Test
+    public void getParameterizedListings_byLotSizeEquals_givenLotSize_successful() throws Exception {
+        // GIVEN
+        // Already created newListings in setup()
+        double lotSize = 1.0;
+
+        // WHEN
+        MvcResult byLotSizeEqualsListingsResult =  mvc.perform(get("/listing/query?squareFootage=0&price=0&numBedrooms=0&lotSize=1.0")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        // THEN
+        String response = byLotSizeEqualsListingsResult.getResponse().getContentAsString();
+        List<ListingResponse> byLotSizeEqualsListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
+        assertThat(byLotSizeEqualsListingsResponseList.get(0).getLotSize()).isEqualTo(lotSize);
     }
 
 }

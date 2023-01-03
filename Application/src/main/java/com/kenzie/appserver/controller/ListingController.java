@@ -8,12 +8,10 @@ import com.kenzie.appserver.controller.model.UpdateListingStatusRequest;
 import com.kenzie.appserver.service.ListingService;
 import com.kenzie.appserver.service.model.Listing;
 import com.kenzie.appserver.service.model.ListingStatus;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,7 +59,7 @@ public class ListingController {
     public ResponseEntity<ListingResponse> updatePrice (@PathVariable("price") int price, @RequestBody UpdateListingPriceRequest updateListingPriceRequest) {
 
         //check for proper price input
-        //dont do anything if price is less then 1
+        //don't do anything if price is less than 1
         if(updateListingPriceRequest.getPrice() < 1) {
             return ResponseEntity.badRequest().build();
         }
@@ -122,13 +120,12 @@ public class ListingController {
     }
 
     @GetMapping("/query")
-    public ResponseEntity<List<ListingResponse>> getParameterizedListings(@RequestParam(name = "squareFootage") int squareFootage,
-                                                                          @RequestParam(name = "price") int price,
-                                                                          @RequestParam(name = "numBedrooms") int numBedrooms,
-                                                                          @RequestParam(name = "numBathrooms") int numBathrooms,
-                                                                          @RequestParam(name = "lotSize") double lotSize) {
+    public ResponseEntity<List<ListingResponse>> getParameterizedListings(@RequestParam(value = "squareFootage", required = false, defaultValue = "0") int squareFootage,
+                                                                          @RequestParam(value = "price", required = false, defaultValue = "0") int price,
+                                                                          @RequestParam(value = "numBedrooms", required = false, defaultValue = "0") int numBedrooms,
+                                                                          @RequestParam(value = "lotSize", required = false, defaultValue = "0.0") double lotSize) {
 
-        List<Listing> parameterizedListings = listingService.findParameterizedListings(squareFootage, price, numBedrooms, numBathrooms, lotSize);
+        List<Listing> parameterizedListings = listingService.findParameterizedListings(squareFootage, price, numBedrooms, lotSize);
 
         // If there are no listingLists, then return a 204
         if (parameterizedListings == null ||  parameterizedListings.isEmpty()) {
