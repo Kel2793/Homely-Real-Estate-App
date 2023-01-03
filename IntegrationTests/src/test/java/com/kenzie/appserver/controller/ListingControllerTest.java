@@ -2,9 +2,11 @@ package com.kenzie.appserver.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.kenzie.appserver.IntegrationTest;
 
 import com.kenzie.appserver.config.ListingGenerator;
+import com.kenzie.appserver.controller.model.ListingCreateRequest;
 import com.kenzie.appserver.controller.model.ListingResponse;
 import com.kenzie.appserver.repositories.model.ListingRecord;
 import com.kenzie.appserver.service.ListingService;
@@ -66,6 +68,63 @@ public class ListingControllerTest {
         String response = result.getResponse().getContentAsString();
         assertThat(response).isNotNull();
         Assertions.assertTrue(response.contains("listingNumber"));
+
+    }
+
+    @Test
+    public void createListing_createSuccessful() throws Exception {
+        // GIVEN
+        Listing listing = listingGenerator.generateListing();
+
+        ListingCreateRequest request = new ListingCreateRequest();
+        request.setAddress(listing.getAddress());
+        request.setPrice(listing.getPrice());
+        request.setSquareFootage(listing.getSquareFootage());
+        request.setNumBedrooms(listing.getNumBedrooms());
+        request.setNumBathrooms(listing.getNumBathrooms());
+        request.setLotSize(listing.getLotSize());
+        request.setListingStatus(listing.getListingStatus());
+
+        // WHEN
+        mapper.registerModule(new JavaTimeModule());
+
+        mvc.perform(post("/listing")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(request)))
+                .andExpect(jsonPath("listingNumber")
+                        .exists())
+                .andExpect(jsonPath("address")
+                        .value(is(listing.getAddress())))
+                .andExpect(jsonPath("squareFootage")
+                        .value(is(listing.getSquareFootage())))
+                .andExpect(jsonPath("price")
+                        .value(is(listing.getPrice())))
+                .andExpect(jsonPath("numBedrooms")
+                        .value(is(listing.getNumBedrooms())))
+                .andExpect(jsonPath("numBathrooms")
+                        .value(is(listing.getNumBathrooms())))
+                .andExpect(jsonPath("listingStatus")
+                        .value(is(listing.getListingStatus())))
+                .andExpect(jsonPath("lotSize")
+                        .value(is(listing.getLotSize())))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void deleteListing_deleteSuccessful() throws Exception {
+        // GIVEN
+        Listing listing = listingGenerator.generateListing();
+
+        Listing persistedListing = listingService.createNewListing(listing);
+
+        // WHEN
+        mvc.perform(delete("/listing/{listingNumber}", persistedListing.getListingNumber())
+                        .accept(MediaType.APPLICATION_JSON))
+
+        // THEN
+                .andExpect(status().isNoContent());
+        assertThat(listingService.findByListingNumber(listing.getListingNumber())).isNull();
 
     }
 }

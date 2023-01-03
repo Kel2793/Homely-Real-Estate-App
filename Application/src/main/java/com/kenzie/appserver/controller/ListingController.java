@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,7 +52,9 @@ public class ListingController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(createListingResponse(listing));
+        ListingResponse response = createListingResponse(listing);
+
+        return ResponseEntity.created(URI.create("/listing/" + response.getListingNumber())).body(response);
     }
 
     @PutMapping("/{price}")
@@ -140,7 +143,9 @@ public class ListingController {
 
     @DeleteMapping("/{listingNumber}")
     public ResponseEntity<ListingResponse> deleteListingByNumber(@PathVariable("listingNumber") String listingNumber) {
-        listingService.deleteListing(listingNumber);
+        if (listingNumber != null) {
+            listingService.deleteListing(listingNumber);
+        }
         return ResponseEntity.noContent().build();
     }
 
