@@ -1,5 +1,6 @@
 package com.kenzie.appserver.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -8,6 +9,8 @@ import com.kenzie.appserver.IntegrationTest;
 import com.kenzie.appserver.config.ListingGenerator;
 import com.kenzie.appserver.controller.model.ListingCreateRequest;
 import com.kenzie.appserver.controller.model.ListingResponse;
+import com.kenzie.appserver.controller.model.UpdateListingPriceRequest;
+import com.kenzie.appserver.controller.model.UpdateListingStatusRequest;
 import com.kenzie.appserver.service.ListingService;
 import com.kenzie.appserver.service.model.Listing;
 import org.junit.jupiter.api.*;
@@ -58,13 +61,13 @@ class ListingControllerTest {
         }
     }
 
-//    @AfterAll
-//    public void cleanUp() {
-//        System.out.println("After All cleanUp() method called");
-//        for (Listing listing : newListings) {
-//            listingService.deleteListing(listing.getListingNumber());
-//        }
-//    }
+    @AfterAll
+    public void cleanUp() {
+        System.out.println("After All cleanUp() method called");
+        for (Listing listing : newListings) {
+            listingService.deleteListing(listing.getListingNumber());
+        }
+    }
 
     @Test
     public void getAllListings_successful() throws Exception {
@@ -283,6 +286,94 @@ class ListingControllerTest {
                         .value(is(lotSize)))
                 .andExpect(jsonPath("listingStatus")
                         .value(is(status)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateListingPrice() throws Exception {
+        Listing listing = listingGenerator.generateListing();
+        String id = listing.getListingNumber();
+        String address = listing.getAddress();
+        int price = listing.getPrice();
+        int squareFootage = listing.getSquareFootage();
+        int numBedrooms = listing.getNumBedrooms();
+        double numBathrooms = listing.getNumBathrooms();
+        double lotSize = listing.getLotSize();
+        String status = listing.getListingStatus();
+
+        Listing persistedListing = listingService.createNewListing(listing);
+
+        int updatedPrice = price + 100;
+
+        UpdateListingPriceRequest updatePricingRequest = new UpdateListingPriceRequest();
+        updatePricingRequest.setListingNumber(id);
+        updatePricingRequest.setPrice(updatedPrice);
+
+        mapper.registerModule(new JavaTimeModule());
+
+        // WHEN
+        mvc.perform(put("/listing")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(updatePricingRequest)))
+                // THEN
+                .andExpect(jsonPath("listingNumber")
+                        .value(is(id)))
+                .andExpect(jsonPath("address")
+                        .value(is(address)))
+                .andExpect(jsonPath("price")
+                        .value(is(updatedPrice)))
+                .andExpect(jsonPath("squareFootage")
+                        .value(is(squareFootage)))
+                .andExpect(jsonPath("numBedrooms")
+                        .value(is(numBedrooms)))
+                .andExpect(jsonPath("numBathrooms")
+                        .value(is(numBathrooms)))
+                .andExpect(jsonPath("lotSize")
+                        .value(is(lotSize)))
+                .andExpect(jsonPath("listingStatus")
+                        .value(is(status)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateListingStatus() throws Exception {
+        String id = UUID.randomUUID().toString();
+        String forSale = "For Sale";
+
+        Listing listing = new Listing(id, "123 Test Street, Test city, Test State, 00000",
+                1000, 750000, 4, 2.5, 0.7, "Under Contract");
+
+        Listing persistedListing = listingService.createNewListing(listing);
+
+        UpdateListingStatusRequest updateStatusRequest = new UpdateListingStatusRequest();
+        updateStatusRequest.setListingNumber(id);
+        updateStatusRequest.setListingStatus(forSale);
+
+        mapper.registerModule(new JavaTimeModule());
+
+        // WHEN
+        mvc.perform(put("/listing")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(updateStatusRequest)))
+                // THEN
+                .andExpect(jsonPath("listingNumber")
+                        .value(is(id)))
+                .andExpect(jsonPath("address")
+                        .value(is("123 Test Street, Test city, Test State, 00000")))
+                .andExpect(jsonPath("price")
+                        .value(is(750000)))
+                .andExpect(jsonPath("squareFootage")
+                        .value(is(1000)))
+                .andExpect(jsonPath("numBedrooms")
+                        .value(is(4)))
+                .andExpect(jsonPath("numBathrooms")
+                        .value(is(2.5)))
+                .andExpect(jsonPath("lotSize")
+                        .value(is(0.7)))
+                .andExpect(jsonPath("listingStatus")
+                        .value(is(forSale)))
                 .andExpect(status().isOk());
     }
 }
