@@ -13,4 +13,5 @@ public interface ListingRepository extends CrudRepository<ListingRecord, String>
     public List<ListingRecord> findByPriceLessThan(Integer price);
     public List<ListingRecord> findByNumBedroomsEquals(Integer numBedrooms);
     public List<ListingRecord> findByLotSizeEquals(Double lotSize);
+    public List<ListingRecord> findBySquareFootageLessThanAndPriceLessThanAndNumBedroomsLessThanAndLotSizeLessThan(Integer squareFootage, Integer price, Integer numBedrooms, Double lotSize);
 }

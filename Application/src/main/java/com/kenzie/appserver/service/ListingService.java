@@ -97,6 +97,12 @@ public class ListingService {
         List<Listing> parameterizedListings = new ArrayList<>();
         Iterable<ListingRecord> listingIterator = null;
 
+        //All the search parameter fields were entered with valid data by the user
+        if (squareFootage != 0 && price != 0 && numBedrooms != 0 && lotSize != 0.0) {
+
+            listingIterator = listingRepository.findBySquareFootageLessThanAndPriceLessThanAndNumBedroomsLessThanAndLotSizeLessThan(squareFootage, price, numBedrooms, lotSize);
+        }
+
         //Only the squareFootage field has valid data
         if (squareFootage != 0 && price == 0 && numBedrooms == 0 && lotSize == 0.0) {
 
