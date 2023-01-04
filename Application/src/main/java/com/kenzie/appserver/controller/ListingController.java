@@ -55,7 +55,7 @@ public class ListingController {
         return ResponseEntity.created(URI.create("/listing/" + response.getListingNumber())).body(response);
     }
 
-    @PutMapping("/{price}")
+    @PutMapping("/price/{price}")
     public ResponseEntity<ListingResponse> updatePrice (@PathVariable("price") int price, @RequestBody UpdateListingPriceRequest updateListingPriceRequest) {
 
         //check for proper price input
@@ -65,11 +65,11 @@ public class ListingController {
         }
 
         listingService.updatePrice(updateListingPriceRequest.getListingNumber(), updateListingPriceRequest.getPrice());
-        return (ResponseEntity<ListingResponse>) ResponseEntity.ok();
+        return ResponseEntity.ok().build();
 
     }
 
-    @PutMapping("/{listingStatus}")
+    @PutMapping("/listingStatus/{listingStatus}")
     public ResponseEntity<ListingResponse> updateStatus (@PathVariable("listingStatus") String listingStatus, @RequestBody UpdateListingStatusRequest updateListingStatusRequest) {
 
         //check for proper status inputs
@@ -84,7 +84,7 @@ public class ListingController {
 
         // else we proceed
         listingService.updateStatus(updateListingStatusRequest.getListingNumber(), updateListingStatusRequest.getListingStatus());
-        return (ResponseEntity<ListingResponse>) ResponseEntity.ok();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
