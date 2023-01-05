@@ -1,0 +1,94 @@
+<html>
+<head>
+    <title>Real Estate Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        main {
+            margin: 20px;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to Homely, Our Real Estate Website!</h1>
+</header>
+<main>
+    <h2>Browse Available Homes</h2>
+    <!-- Add a search form for filtering the homes -->
+    <form>
+        <style>
+            /* Style the text boxes to display side by side */
+            .price-input {
+                display: inline-block;
+                width: 7%;
+            }
+        </style>
+        <label for="max-price">Maximum Price:</label>
+        <input type="text" id="max-price" name="max-price" class="price-input" placeholder="$1,000,000+" required>
+        <br>
+        <label for="min-bedroom">Minimum Bedrooms:</label>
+        <input type="text" id="min-bedroom" name="min-bedroom" class="bedroom-input" placeholder="1" required>
+        <br>
+        <label for="min-bathroom">Minimum Bathrooms:</label>
+        <input type="text" id="min-bathroom" name="min-bathroom" class="bathroom-input" placeholder="1" required>
+        <br>
+        <label for="max-squarefeet">Maximum Squarefeet:</label>
+        <input type="text" id="max-squarefeet" name="max-squarefeet" class="squarefeet-input" placeholder="1800" required>
+        <br>
+        <label for="min-lotsize">Minimum Lot Size:</label>
+        <input type="text" id="min-lotsize" name="min-lotsize" class="lotsize-input" placeholder="1.5" required>
+        <br>
+        <button type="submit" onclick="searchHomes()">Search</button>
+    </form>
+    <!-- Display the search results in a table -->
+
+    <!-- Table rows for each home in the search results
+    <tr>
+      <td><img src="#" alt="Home image"></td>
+      <td>123 Main St</td>
+      <td>$500,000</td>
+      <td>3</td>
+      <td>2</td>
+    </tr>
+    Add more rows for additional homes in the search results -->
+    </table>
+    <h2>Sell a Home</h2>
+    <!-- Add a search form for filtering the homes -->
+    <form>
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price" class="price-input" placeholder="$265000" required>
+        <br>
+        <label for="bedrooms">Number of Bedrooms:</label>
+        <input type="text" id="bedrooms" name="bedrooms" class="bedroom-input" placeholder="1" required>
+        <br>
+        <label for="bathrooms">Number of Bathrooms:</label>
+        <input type="text" id="bathrooms" name="bathrooms" class="bathroom-input" placeholder="1" required>
+        <br>
+        <label for="squarefeet">Squarefeet:</label>
+        <input type="text" id="squarefeet" name="squarefeet" class="squarefeet-input" placeholder="1600" required>
+        <br>
+        <label for="lotsize">Lot Size:</label>
+        <input type="text" id="lotsize" name="lotsize" class="lotsize-input" placeholder="1.5" required>
+        <br>
+        <button type="submit" onclick="newListing()">Create Listing</button>
+    </form>
+</main>
+<footer>
+    <p>Copyright 2023</p>
+</footer>
+</body>
+</html>
