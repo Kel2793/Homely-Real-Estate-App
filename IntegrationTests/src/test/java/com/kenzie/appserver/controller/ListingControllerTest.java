@@ -42,7 +42,6 @@ class ListingControllerTest {
     private ObjectMapper mapper;
     private ListingGenerator listingGenerator;
     private List<Listing> newListings;
-    private int lotSizeCounter =0;
 
     @BeforeAll
     public void setup() {
@@ -52,9 +51,6 @@ class ListingControllerTest {
         newListings = new ArrayList<>();
         for (int i = 0; i < 200; i++) {
             Listing generatedListing = listingGenerator.generateListing();
-            if (generatedListing.getLotSize() == 0) {
-                lotSizeCounter++;
-            }
             newListings.add(generatedListing);
         }
 
@@ -161,98 +157,124 @@ class ListingControllerTest {
         String response = openListingsResult.getResponse().getContentAsString();
         List<ListingResponse> openListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
         assertThat(openListingsResponseList).isNotEmpty().hasSizeGreaterThan(0);
-        assertThat(openListingsResponseList.get(0).getListingStatus()).isEqualToIgnoringCase("For Sale");
+        for(ListingResponse listingResponse : openListingsResponseList) {
+            assertThat(listingResponse.getListingStatus()).isEqualToIgnoringCase("For Sale");
+        }
+
     }
 
     @Test
     public void getParameterizedListings_byPriceLessThan_givenPrice_successful() throws Exception {
         // GIVEN
         // Already created newListings in setup()
-        int price = 400000;
-
+        Integer price = 400000;
+        String urlTemplate = "/listing/query?squareFootage=0&price=" + price.toString() + "&numBedrooms=0&lotSize=0.0";
         // WHEN
-        MvcResult byPriceLessThanListingsResult =  mvc.perform(get("/listing/query?squareFootage=0&price=400000&numBedrooms=0&lotSize=0.0")
+        MvcResult byPriceLessThanListingsResult =  mvc.perform(get(urlTemplate)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
 
         // THEN
         String response = byPriceLessThanListingsResult.getResponse().getContentAsString();
         List<ListingResponse> byPriceLessThanListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
-        assertThat(byPriceLessThanListingsResponseList.get(0).getPrice()).isLessThan(price);
+        for (ListingResponse listingResponse : byPriceLessThanListingsResponseList) {
+            assertThat(listingResponse.getPrice()).isLessThan(price);
+        }
+
     }
 
     @Test
-    public void getParameterizedListings_bySquareFootageLessThan_givenSquareFootage_successful() throws Exception {
+    public void getParameterizedListings_bySquareFootageMoreThan_givenSquareFootage_successful() throws Exception {
         // GIVEN
         // Already created newListings in setup()
-        int squareFootage = 2000;
+        Integer squareFootage = 2000;
+        String urlTemplate = "/listing/query?squareFootage=" + squareFootage.toString() + "&price=0&numBedrooms=0&lotSize=0.0";
 
         // WHEN
-        MvcResult bySquareFootageLessThanListingsResult =  mvc.perform(get("/listing/query?squareFootage=2000&price=0&numBedrooms=0&lotSize=0.0")
+        MvcResult bySquareFootageMoreThanListingsResult =  mvc.perform(get(urlTemplate)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
 
         // THEN
-        String response = bySquareFootageLessThanListingsResult.getResponse().getContentAsString();
-        List<ListingResponse> bySquareFootageLessThanListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
-        assertThat(bySquareFootageLessThanListingsResponseList.get(0).getSquareFootage()).isLessThan(squareFootage);
+        String response = bySquareFootageMoreThanListingsResult.getResponse().getContentAsString();
+        List<ListingResponse> bySquareFootageMoreThanListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
+        for (ListingResponse listingResponse : bySquareFootageMoreThanListingsResponseList) {
+            assertThat(listingResponse.getSquareFootage()).isGreaterThanOrEqualTo(squareFootage);
+        }
+
     }
 
     @Test
-    public void getParameterizedListings_byNumOfBedroomsEquals_givenNumOfBedrooms_successful() throws Exception {
+    public void getParameterizedListings_byNumOfBedroomsEqualsOrGreater_givenNumOfBedrooms_successful() throws Exception {
         // GIVEN
         // Already created newListings in setup()
-        int numBedrooms = 3;
-
+        Integer numBedrooms = 3;
+        String urlTemplate = "/listing/query?squareFootage=0&price=0&numBedrooms=" + numBedrooms.toString() + "&lotSize=0.0";
         // WHEN
-        MvcResult byNumOfBedroomsEqualsListingsResult =  mvc.perform(get("/listing/query?squareFootage=0&price=0&numBedrooms=3&lotSize=0.0")
+        MvcResult byNumOfBedroomsEqualsListingsResult =  mvc.perform(get(urlTemplate)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
 
         // THEN
         String response = byNumOfBedroomsEqualsListingsResult.getResponse().getContentAsString();
-        List<ListingResponse> byNumOfBedroomsEqualsListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
-        assertThat(byNumOfBedroomsEqualsListingsResponseList.get(0).getNumBedrooms()).isEqualTo(numBedrooms);
+        List<ListingResponse> byNumOfBedroomsEqualsOrGreaterListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
+        for (ListingResponse listingResponse : byNumOfBedroomsEqualsOrGreaterListingsResponseList) {
+            assertThat(listingResponse.getNumBedrooms()).isGreaterThanOrEqualTo(numBedrooms);
+        }
+
     }
 
     @Test
-    public void getParameterizedListings_byLotSizeEquals_givenLotSize_successful() throws Exception {
+    public void getParameterizedListings_byLotSizeEqualsOrGreater_givenLotSize_successful() throws Exception {
         // GIVEN
         // Already created newListings in setup()
-        double lotSize = 1.0;
-
+        Double lotSize = 1.0;
+        String urlTemplate = "/listing/query?squareFootage=0&price=0&numBedrooms=0&lotSize=" + lotSize.toString();
         // WHEN
-        MvcResult byLotSizeEqualsListingsResult =  mvc.perform(get("/listing/query?squareFootage=0&price=0&numBedrooms=0&lotSize=1.0")
+        MvcResult byLotSizeGreaterThen =  mvc.perform(get(urlTemplate)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
 
         // THEN
-        String response = byLotSizeEqualsListingsResult.getResponse().getContentAsString();
-        List<ListingResponse> byLotSizeEqualsListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
-        assertThat(byLotSizeEqualsListingsResponseList.get(0).getLotSize()).isEqualTo(lotSize);
+        String response = byLotSizeGreaterThen.getResponse().getContentAsString();
+        List<ListingResponse> byLotSizeGreaterThenListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
+        for (ListingResponse listingResponse : byLotSizeGreaterThenListingsResponseList) {
+            assertThat(listingResponse.getLotSize()).isGreaterThanOrEqualTo(lotSize);
+        }
+
     }
 
     @Test
     public void getParameterizedListings_givenAllValidQueryParameters_successful() throws Exception {
         // GIVEN
         // Already created newListings in setup()
-        int squareFootage = 5000;
-        int price = 700000;
-        int numBedrooms = 7;
-        double lotSize = 2.0;
+        Integer squareFootage = 2000;
+        Integer price = 1000000;
+        Integer numBedrooms = 2;
+        Double lotSize = 0.0;
+        Double numBathrooms = 0.0;
+
+        String urlTemplate = "/listing/query?squareFootage=" + squareFootage.toString()
+                                + "&price=" + price.toString() + "&numBedrooms=" +numBedrooms.toString()
+                                + "&numBathrooms=" + numBathrooms.toString() + "&lotSize=" + lotSize.toString();
 
         // WHEN
-        MvcResult parameterizedListingsResult =  mvc.perform(get("/listing/query?squareFootage=5000&price=700000&numBedrooms=7&lotSize=2.0")
+        MvcResult parameterizedListingsResult =  mvc.perform(get(urlTemplate)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
 
         // THEN
         String response = parameterizedListingsResult.getResponse().getContentAsString();
         List<ListingResponse> parameterizedListingsResponseList = mapper.readValue(response, new TypeReference<List<ListingResponse>>() {});
-        assertThat(parameterizedListingsResponseList.get(0).getSquareFootage()).isLessThan(squareFootage);
-        assertThat(parameterizedListingsResponseList.get(0).getPrice()).isLessThan(price);
-        assertThat(parameterizedListingsResponseList.get(0).getNumBedrooms()).isLessThan(numBedrooms);
-        assertThat(parameterizedListingsResponseList.get(0).getLotSize()).isLessThan(lotSize);
+        System.out.println("Found: " + parameterizedListingsResponseList.size() + " results");
+        for(ListingResponse listingResponse : parameterizedListingsResponseList) {
+            assertThat(listingResponse.getSquareFootage()).isGreaterThanOrEqualTo(squareFootage);
+            assertThat(listingResponse.getPrice()).isLessThan(price);
+            assertThat(listingResponse.getNumBedrooms()).isGreaterThanOrEqualTo(numBedrooms);
+            assertThat(listingResponse.getLotSize()).isGreaterThanOrEqualTo(lotSize);
+            assertThat(listingResponse.getNumBathrooms()).isGreaterThanOrEqualTo(numBathrooms);
+        }
+
     }
 
     @Test
@@ -268,6 +290,7 @@ class ListingControllerTest {
         String status = listing.getListingStatus();
 
         Listing persistedListing = listingService.createNewListing(listing);
+        newListings.add(persistedListing);
 
         // WHEN
         mvc.perform(get("/listing/{listingNumber}", persistedListing.getListingNumber())
@@ -305,6 +328,7 @@ class ListingControllerTest {
         String status = listing.getListingStatus();
 
         Listing persistedListing = listingService.createNewListing(listing);
+        newListings.add(persistedListing);
 
         int updatedPrice = price + 100;
 
@@ -345,6 +369,7 @@ class ListingControllerTest {
                 1000, 750000, 4, 2.5, 0.7, "Under Contract");
 
         Listing persistedListing = listingService.createNewListing(listing);
+        newListings.add(persistedListing);
 
         UpdateListingStatusRequest updateStatusRequest = new UpdateListingStatusRequest();
         updateStatusRequest.setListingNumber(id);
