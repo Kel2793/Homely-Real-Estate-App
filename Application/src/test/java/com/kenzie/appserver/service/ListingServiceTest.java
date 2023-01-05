@@ -505,9 +505,9 @@ public class ListingServiceTest {
         List<ListingRecord> expected = new ArrayList<>();
         expected.add(record1);
 
-        when(listingServiceRepository.findBySquareFootageLessThanAndPriceLessThanAndNumBedroomsLessThanAndLotSizeLessThan(1800, 350000, 5, 2.00)).thenReturn(expected);
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1800, 350000, 5, 0.0, 2.00)).thenReturn(expected);
 
-        List<Listing> actualList = listingService.findParameterizedListings(1800, 350000, 5, 2.00);
+        List<Listing> actualList = listingService.findParameterizedListings(1800, 350000, 5, 0,2.00);
 
         Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
         Assertions.assertEquals(1, actualList.size());
@@ -537,9 +537,9 @@ public class ListingServiceTest {
         List<ListingRecord> expected = new ArrayList<>();
         expected.add(record1);
 
-        when(listingServiceRepository.findBySquareFootageLessThan(1300)).thenReturn(expected);
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqual(1300)).thenReturn(expected);
 
-        List<Listing> actualList = listingService.findParameterizedListings(1300, 0, 0, 0);
+        List<Listing> actualList = listingService.findParameterizedListings(1300, 0, 0, 0, 0.0);
 
         Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
         Assertions.assertEquals(1, actualList.size());
@@ -582,7 +582,7 @@ public class ListingServiceTest {
 
         when(listingServiceRepository.findByPriceLessThan(500000)).thenReturn(expected);
 
-        List<Listing> actualList = listingService.findParameterizedListings(0, 500000, 0, 0);
+        List<Listing> actualList = listingService.findParameterizedListings(0, 500000, 0, 0, 0.0);
 
         Assertions.assertNotNull(actualList, "There should be two listings that match the criteria");
         Assertions.assertEquals(2, actualList.size());
@@ -632,9 +632,9 @@ public class ListingServiceTest {
         expected.add(record1);
         expected.add(record2);
 
-        when(listingServiceRepository.findByNumBedroomsEquals(2)).thenReturn(expected);
+        when(listingServiceRepository.findByNumBedroomsGreaterThanEqual(2)).thenReturn(expected);
 
-        List<Listing> actualList = listingService.findParameterizedListings(0, 0, 2, 0);
+        List<Listing> actualList = listingService.findParameterizedListings(0, 0, 2, 0, 0);
 
         Assertions.assertNotNull(actualList, "There should be two listings that matches the criteria");
         Assertions.assertEquals(2, actualList.size());
@@ -664,7 +664,7 @@ public class ListingServiceTest {
                 1425,
                 625000,
                 3,
-                2,
+                2.0,
                 1.9,
                 "For sale");
 
@@ -673,9 +673,9 @@ public class ListingServiceTest {
         List<ListingRecord> expected = new ArrayList<>();
         expected.add(record1);
 
-        when(listingServiceRepository.findByLotSizeEquals(2.00)).thenReturn(expected);
+        when(listingServiceRepository.findByLotSizeGreaterThanEqual(2.00)).thenReturn(expected);
 
-        List<Listing> actualList = listingService.findParameterizedListings(0, 0, 0, 2);
+        List<Listing> actualList = listingService.findParameterizedListings(0, 0, 0, 2.0, 0.0);
 
         Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
         Assertions.assertEquals(1, actualList.size());

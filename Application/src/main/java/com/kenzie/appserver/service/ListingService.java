@@ -93,38 +93,163 @@ public class ListingService {
         }
     }
 
-    public List<Listing> findParameterizedListings(int squareFootage, int price, int numBedrooms, double lotSize) {
+    public List<Listing> findParameterizedListings(int squareFootage, int price, int numBedrooms, double numBathrooms, double lotSize) {
         List<Listing> parameterizedListings = new ArrayList<>();
         Iterable<ListingRecord> listingIterator = null;
 
         //All the search parameter fields were entered with valid data by the user
-        if (squareFootage != 0 && price != 0 && numBedrooms != 0 && lotSize != 0.0) {
+        if (squareFootage != 0 && price != 0 && numBedrooms != 0 && numBathrooms != 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(squareFootage, price, numBedrooms, numBathrooms, lotSize);
+        }
 
-            listingIterator = listingRepository.findBySquareFootageLessThanAndPriceLessThanAndNumBedroomsLessThanAndLotSizeLessThan(squareFootage, price, numBedrooms, lotSize);
+        //Only the squareFootage, price, numBedrooms and numBathrooms fields were entered with valid data by the user
+        if (squareFootage != 0 && price != 0 && numBedrooms != 0 && numBathrooms != 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(squareFootage, price, numBedrooms, numBathrooms);
+        }
+
+        //Only the squareFootage, price, numBedrooms and lotSize fields were entered with valid data by the user
+        if (squareFootage != 0 && price != 0 && numBedrooms != 0 && numBathrooms == 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(squareFootage, price, numBedrooms, lotSize);
+        }
+
+        //Only the squareFootage, price, numBathrooms and lotSize fields were entered with valid data by the user
+        if (squareFootage != 0 && price != 0 && numBedrooms == 0 && numBathrooms != 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(squareFootage, price, numBathrooms, lotSize);
+        }
+
+        //Only the squareFootage, numBedrooms, numBathrooms and lotSize fields were entered with valid data by the user
+        if (squareFootage != 0 && price == 0 && numBedrooms != 0 && numBathrooms != 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(squareFootage, numBedrooms, numBathrooms, lotSize);
+        }
+
+        //Only the squareFootage, price and numBedrooms fields were entered with valid data by the user
+        if (squareFootage != 0 && price != 0 && numBedrooms != 0 && numBathrooms == 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqual(squareFootage, price, numBedrooms);
+        }
+
+        //Only the squareFootage, price and numBathrooms fields were entered with valid data by the user
+        if (squareFootage != 0 && price != 0 && numBedrooms == 0 && numBathrooms != 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBathroomsGreaterThanEqual(squareFootage, price, numBathrooms);
+        }
+
+        //Only the squareFootage, price and lotSize fields were entered with valid data by the user
+        if (squareFootage != 0 && price != 0 && numBedrooms == 0 && numBathrooms == 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndLotSizeGreaterThanEqual(squareFootage, price, lotSize);
+        }
+
+        //Only the squareFootage, numBedrooms and numBathrooms fields were entered with valid data by the user
+        if (squareFootage != 0 && price == 0 && numBedrooms != 0 && numBathrooms != 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(squareFootage, numBedrooms, numBathrooms);
+        }
+
+        //Only the squareFootage, numBedrooms and lotSize fields were entered with valid data by the user
+        if (squareFootage != 0 && price == 0 && numBedrooms != 0 && numBathrooms == 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(squareFootage, numBedrooms, lotSize);
+        }
+
+        //Only the squareFootage, numBathrooms and lotSize fields were entered with valid data by the user
+        if (squareFootage != 0 && price == 0 && numBedrooms == 0 && numBathrooms != 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(squareFootage, numBathrooms, lotSize);
+        }
+
+        //Only the squareFootage and price fields were entered with valid data by the user
+        if (squareFootage != 0 && price != 0 && numBedrooms == 0 && numBathrooms == 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndPriceLessThan(squareFootage, price);
+        }
+
+        //Only the squareFootage and numBedrooms fields were entered with valid data by the user
+        if (squareFootage != 0 && price == 0 && numBedrooms != 0 && numBathrooms == 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqual(squareFootage, numBedrooms);
+        }
+
+        //Only the squareFootage and numBathrooms fields were entered with valid data by the user
+        if (squareFootage != 0 && price == 0 && numBedrooms == 0 && numBathrooms != 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndNumBathroomsGreaterThanEqual(squareFootage, numBathrooms);
+        }
+
+        //Only the squareFootage and lotSize fields were entered with valid data by the user
+        if (squareFootage != 0 && price == 0 && numBedrooms != 0 && numBathrooms == 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndLotSizeGreaterThanEqual(squareFootage, lotSize);
         }
 
         //Only the squareFootage field has valid data
-        if (squareFootage != 0 && price == 0 && numBedrooms == 0 && lotSize == 0.0) {
-
-            listingIterator = listingRepository.findBySquareFootageLessThan(squareFootage);
+        if (squareFootage != 0 && price == 0 && numBedrooms == 0 && numBathrooms == 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findBySquareFootageGreaterThanEqual(squareFootage);
         }
 
         //Only the price field has valid data
-        if (squareFootage == 0 && price != 0 && numBedrooms == 0 && lotSize == 0.0) {
-
+        if (squareFootage == 0 && price != 0 && numBedrooms == 0 && numBathrooms == 0.0 && lotSize == 0.0) {
             listingIterator = listingRepository.findByPriceLessThan(price);
         }
 
-        //Only the numBedrooms field has valid data
-        if (squareFootage == 0 && price == 0 && numBedrooms != 0 && lotSize == 0.0) {
+        //Only the price and numBedrooms fields were entered with valid data by the user
+        if (squareFootage == 0 && price != 0 && numBedrooms != 0 && numBathrooms == 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqual(price, numBedrooms);
+        }
 
-            listingIterator = listingRepository.findByNumBedroomsEquals(numBedrooms);
+        //Only the price and numBathrooms fields were entered with valid data by the user
+        if (squareFootage == 0 && price != 0 && numBedrooms == 0 && numBathrooms != 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findByPriceLessThanAndNumBathroomsGreaterThanEqual(price, numBathrooms);
+        }
+
+        //Only the price and lotSize fields were entered with valid data by the user
+        if (squareFootage == 0 && price != 0 && numBedrooms == 0 && numBathrooms != 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findByPriceLessThanAndLotSizeGreaterThanEqual(price, lotSize);
+        }
+
+        //Only the price, numBedrooms and numBathrooms fields were entered with valid data by the user
+        if (squareFootage == 0 && price != 0 && numBedrooms != 0 && numBathrooms != 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(price, numBedrooms, numBathrooms);
+        }
+
+        //Only the price, numBedrooms and lotSize fields were entered with valid data by the user
+        if (squareFootage == 0 && price != 0 && numBedrooms != 0 && numBathrooms == 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(price, numBedrooms, lotSize);
+        }
+
+        //Only the price, numBathrooms and lotSize fields were entered with valid data by the user
+        if (squareFootage == 0 && price != 0 && numBedrooms == 0 && numBathrooms != 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findByPriceLessThanAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(price, numBathrooms, lotSize);
+        }
+
+        //Only the price, numBedrooms, numBathrooms and lotSize fields were entered with valid data by the user
+        if (squareFootage == 0 && price != 0 && numBedrooms != 0 && numBathrooms != 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(price, numBedrooms, numBathrooms, lotSize);
+        }
+
+        //Only the numBedrooms field has valid data
+        if (squareFootage == 0 && price == 0 && numBedrooms != 0 && numBathrooms == 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findByNumBedroomsGreaterThanEqual(numBedrooms);
+        }
+
+        //Only the numBedrooms and numBathrooms fields were entered with valid data by the user
+        if (squareFootage == 0 && price == 0 && numBedrooms != 0 && numBathrooms != 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findByNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(numBedrooms, numBathrooms);
+        }
+
+        //Only the numBedrooms and lotSize fields were entered with valid data by the user
+        if (squareFootage == 0 && price == 0 && numBedrooms != 0 && numBathrooms == 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findByNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(numBedrooms, lotSize);
+        }
+
+        //Only the numBedrooms, numBathrooms and lotSize fields were entered with valid data by the user
+        if (squareFootage == 0 && price == 0 && numBedrooms != 0 && numBathrooms != 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findByNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(numBedrooms, numBathrooms, lotSize);
+        }
+
+        //Only the numBathrooms field has valid data
+        if (squareFootage == 0 && price == 0 && numBedrooms == 0 && numBathrooms != 0.0 && lotSize == 0.0) {
+            listingIterator = listingRepository.findByNumBathroomsGreaterThanEqual(numBathrooms);
+        }
+
+        //Only the numBathrooms and lotSize fields were entered with valid data by the user
+        if (squareFootage == 0 && price == 0 && numBedrooms == 0 && numBathrooms != 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findByNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(numBathrooms, lotSize);
         }
 
         //Only the lotSize field has valid data
-        if (squareFootage == 0 && price == 0 && numBedrooms == 0 && lotSize != 0.0) {
-
-            listingIterator = listingRepository.findByLotSizeEquals(lotSize);
+        if (squareFootage == 0 && price == 0 && numBedrooms == 0 && numBathrooms == 0.0 && lotSize != 0.0) {
+            listingIterator = listingRepository.findByLotSizeGreaterThanEqual(lotSize);
         }
 
         assert listingIterator != null;

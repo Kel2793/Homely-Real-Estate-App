@@ -123,9 +123,10 @@ public class ListingController {
     public ResponseEntity<List<ListingResponse>> getParameterizedListings(@RequestParam(value = "squareFootage", required = false, defaultValue = "0") int squareFootage,
                                                                           @RequestParam(value = "price", required = false, defaultValue = "0") int price,
                                                                           @RequestParam(value = "numBedrooms", required = false, defaultValue = "0") int numBedrooms,
+                                                                          @RequestParam(value = "numBathrooms", required = false, defaultValue = "0.0") double numBathrooms,
                                                                           @RequestParam(value = "lotSize", required = false, defaultValue = "0.0") double lotSize) {
 
-        List<Listing> parameterizedListings = listingService.findParameterizedListings(squareFootage, price, numBedrooms, lotSize);
+        List<Listing> parameterizedListings = listingService.findParameterizedListings(squareFootage, price, numBedrooms, numBathrooms, lotSize);
 
         // If there are no listingLists, then return a 204
         if (parameterizedListings == null ||  parameterizedListings.isEmpty()) {
