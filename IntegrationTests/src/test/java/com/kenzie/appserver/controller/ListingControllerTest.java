@@ -42,6 +42,7 @@ class ListingControllerTest {
     private ObjectMapper mapper;
     private ListingGenerator listingGenerator;
     private List<Listing> newListings;
+    private int lotSizeCounter =0;
 
     @BeforeAll
     public void setup() {
@@ -49,8 +50,12 @@ class ListingControllerTest {
         listingGenerator = new ListingGenerator();
 
         newListings = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            newListings.add(listingGenerator.generateListing());
+        for (int i = 0; i < 200; i++) {
+            Listing generatedListing = listingGenerator.generateListing();
+            if (generatedListing.getLotSize() == 0) {
+                lotSizeCounter++;
+            }
+            newListings.add(generatedListing);
         }
 
         for (Listing listing : newListings) {
