@@ -5,11 +5,11 @@ import ExampleClient from "../api/exampleClient";
 /**
  * Logic needed for the view playlist page of the website.
  */
-class ExamplePage extends BaseClass {
+class HomePage extends BaseClass {
 
     constructor() {
         super();
-        this.bindClassMethods(['onGet', 'onCreate', 'renderExample'], this);
+        this.bindClassMethods(['onGet', 'onCreate', 'renderHome'], this);
         this.dataStore = new DataStore();
     }
 
@@ -26,7 +26,7 @@ class ExamplePage extends BaseClass {
 
     // Render Methods --------------------------------------------------------------------------------------------------
 
-    async renderExample() {
+    async renderHome() {
         let resultArea = document.getElementById("result-info");
 
         const example = this.dataStore.get("example");
@@ -48,10 +48,10 @@ class ExamplePage extends BaseClass {
         event.preventDefault();
 
         let id = document.getElementById("id-field").value;
-        this.dataStore.set("example", null);
+        this.dataStore.set("home", null);
 
         let result = await this.client.getExample(id, this.errorHandler);
-        this.dataStore.set("example", result);
+        this.dataStore.set("home", result);
         if (result) {
             this.showMessage(`Got ${result.name}!`)
         } else {
@@ -62,12 +62,12 @@ class ExamplePage extends BaseClass {
     async onCreate(event) {
         // Prevent the page from refreshing on form submit
         event.preventDefault();
-        this.dataStore.set("example", null);
+        this.dataStore.set("home", null);
 
         let name = document.getElementById("create-name-field").value;
 
         const createdExample = await this.client.createExample(name, this.errorHandler);
-        this.dataStore.set("example", createdExample);
+        this.dataStore.set("home", createdExample);
 
         if (createdExample) {
             this.showMessage(`Created ${createdExample.name}!`)
@@ -81,8 +81,8 @@ class ExamplePage extends BaseClass {
  * Main method to run when the page contents have loaded.
  */
 const main = async () => {
-    const examplePage = new ExamplePage();
-    examplePage.mount();
+    const homePage = new HomePage();
+    homePage.mount();
 };
 
 window.addEventListener('DOMContentLoaded', main);

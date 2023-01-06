@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <title>Real Estate Website</title>
@@ -21,6 +22,9 @@
             text-align: center;
         }
     </style>
+    <script type="text/javascript" src="homePage.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
 <header>
@@ -28,10 +32,8 @@
 </header>
 <main>
     <h2>Browse Available Homes</h2>
-    <!-- Add a search form for filtering the homes -->
     <form>
         <style>
-            /* Style the text boxes to display side by side */
             .price-input {
                 display: inline-block;
                 width: 7%;
@@ -54,20 +56,19 @@
         <br>
         <button type="submit" onclick="searchHomes()">Search</button>
     </form>
+
+    <div class="card" id="result">
+        <h2>Listings That Match Your Criteria:</h2>
+        <p id="result-info"></p>
+    </div>
+    <br>
     <!-- Display the search results in a table -->
 
     <!-- Table rows for each home in the search results
     <tr>
-      <td><img src="#" alt="Home image"></td>
-      <td>123 Main St</td>
-      <td>$500,000</td>
-      <td>3</td>
-      <td>2</td>
-    </tr>
-    Add more rows for additional homes in the search results -->
+    </tr> -->
     </table>
     <h2>Sell a Home</h2>
-    <!-- Add a search form for filtering the homes -->
     <form>
         <label for="price">Price:</label>
         <input type="text" id="price" name="price" class="price-input" placeholder="$265000" required>
