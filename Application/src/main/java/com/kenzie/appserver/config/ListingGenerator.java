@@ -15,9 +15,11 @@ public class ListingGenerator {
     ArrayList<String> streetNames = new ArrayList<>();
     ArrayList<String> streetTypes = new ArrayList<>();
     ArrayList<String> listingStatus = new ArrayList<>();
+    ArrayList<String> uuidGenArr = new ArrayList<>();
     Random random = new Random();
     MockNeat mock = MockNeat.threadLocal();
     StringBuilder sb = new StringBuilder();
+    StringBuilder uuidGen = new StringBuilder();
 
     public ListingGenerator() {
         streetNames.add("Main");
@@ -72,6 +74,42 @@ public class ListingGenerator {
         listingStatus.add("Withdrawn");
         listingStatus.add("Under Contract");
 
+        uuidGenArr.add("A");
+        uuidGenArr.add("B");
+        uuidGenArr.add("C");
+        uuidGenArr.add("D");
+        uuidGenArr.add("E");
+        uuidGenArr.add("F");
+        uuidGenArr.add("G");
+        uuidGenArr.add("H");
+        uuidGenArr.add("I");
+        uuidGenArr.add("J");
+        uuidGenArr.add("K");
+        uuidGenArr.add("L");
+        uuidGenArr.add("M");
+        uuidGenArr.add("N");
+        uuidGenArr.add("O");
+        uuidGenArr.add("P");
+        uuidGenArr.add("Q");
+        uuidGenArr.add("R");
+        uuidGenArr.add("S");
+        uuidGenArr.add("T");
+        uuidGenArr.add("U");
+        uuidGenArr.add("V");
+        uuidGenArr.add("W");
+        uuidGenArr.add("X");
+        uuidGenArr.add("Y");
+        uuidGenArr.add("Z");
+        uuidGenArr.add("1");
+        uuidGenArr.add("2");
+        uuidGenArr.add("3");
+        uuidGenArr.add("4");
+        uuidGenArr.add("5");
+        uuidGenArr.add("6");
+        uuidGenArr.add("7");
+        uuidGenArr.add("8");
+        uuidGenArr.add("9");
+        uuidGenArr.add("0");
     }
 
     public Listing generateListing() {
@@ -106,5 +144,14 @@ public class ListingGenerator {
         String status = listingStatus.get(random.nextInt(listingStatus.size()));
 
         return new Listing(id, finalAddress, squareFootage, price, numBedrooms, numBathrooms, lotSize, status);
+    }
+
+    public String generateId() {
+        for(int i =0; i<8; i++) {
+            uuidGen.append(uuidGenArr.get(random.nextInt(uuidGenArr.size())));
+        }
+        String returnedId = uuidGen.toString();
+        uuidGen.setLength(0);
+        return returnedId;
     }
 }

@@ -1,6 +1,7 @@
 package com.kenzie.appserver.controller;
 
 
+import com.kenzie.appserver.config.ListingGenerator;
 import com.kenzie.appserver.controller.model.ListingCreateRequest;
 import com.kenzie.appserver.controller.model.ListingResponse;
 import com.kenzie.appserver.controller.model.UpdateListingPriceRequest;
@@ -21,6 +22,7 @@ import static java.util.UUID.randomUUID;
 @RequestMapping("/listing")
 public class ListingController {
     private ListingService listingService;
+    private ListingGenerator generator;
 
     ListingController(ListingService listingService) {
         this.listingService = listingService;
@@ -40,7 +42,9 @@ public class ListingController {
     @PostMapping
     public ResponseEntity<ListingResponse> addNewListing(@RequestBody ListingCreateRequest listingCreateRequest) {
 
-        Listing listing = new Listing(randomUUID().toString(),listingCreateRequest.getAddress(),
+        String id = generator.generateId();
+
+        Listing listing = new Listing(id,listingCreateRequest.getAddress(),
                 listingCreateRequest.getSquareFootage(),listingCreateRequest.getPrice(),
                 listingCreateRequest.getNumBedrooms(), listingCreateRequest.getNumBathrooms(),
                 listingCreateRequest.getLotSize(), listingCreateRequest.getListingStatus());
