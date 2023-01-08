@@ -14,11 +14,13 @@ class HomePage extends BaseClass {
     }
 
     /**
-     * Once the page has loaded, set up the event handlers and fetch the concert list.
+     * Once the page has loaded, set up the event handlers and fetch the listings.
      */
     async mount() {
         document.getElementById('create-form').addEventListener('submit', this.onCreate);
         document.getElementById('search-homes-form').addEventListener('submit', this.onSearch);
+        document.getElementById('get-all-open-listings-form').addEventListener('submit', this.onSearch);
+        document.getElementById('search-by-listingNumber-form').addEventListener('submit', this.onSearch);
         this.client = new ListingClient();
 
         this.dataStore.addChangeListener(this.renderHomeSearch);
