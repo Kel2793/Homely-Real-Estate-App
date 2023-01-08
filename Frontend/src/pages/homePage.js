@@ -19,7 +19,7 @@ class HomePage extends BaseClass {
     async mount() {
         document.getElementById('create-form').addEventListener('submit', this.onCreate);
         document.getElementById('search-homes-form').addEventListener('submit', this.onSearch);
-        document.getElementById('get-all-open-listings-form').addEventListener('submit', this.onSearch);
+        document.getElementById('get-all-open-listings-form').addEventListener('submit', this.onGetListings);
         document.getElementById('search-by-listingNumber-form').addEventListener('submit', this.onSearch);
         this.client = new ListingClient();
 
