@@ -22,7 +22,7 @@ import static java.util.UUID.randomUUID;
 @RequestMapping("/listing")
 public class ListingController {
     private ListingService listingService;
-    private ListingGenerator generator;
+    private ListingGenerator generator = new ListingGenerator();
 
     ListingController(ListingService listingService) {
         this.listingService = listingService;

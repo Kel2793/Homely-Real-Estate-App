@@ -26,7 +26,7 @@ class HomePage extends BaseClass {
         this.dataStore.addChangeListener(this.renderHomeSearch);
         this.dataStore.addChangeListener(this.renderHomeListing);
         this.onGetListings();
-        this.onSearch();
+        //this.onSearch();
     }
 
     // Render Methods --------------------------------------------------------------------------------------------------
