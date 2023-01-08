@@ -32,7 +32,19 @@
 </header>
 <main>
     <h2>Browse Available Homes</h2>
-    <form class="card-search-criteria" id="search-homes-form">
+    <form class="card-search-criteria" id="get-all-open-listings-form">
+        <button type="submit">View All Listings</button>
+    </form>
+    <br>
+    <form class="card-search-criteria" id="search-by-listingNumber-form">
+        <label for="listingNumber">Listing Number:</label>
+        <input type="number" min="0" value="0" id="listingNumber" name="listingNumber" class="listingNumber-input" placeholder="8eaf34kj" >
+        <br>
+        <button type="submit">Search</button>
+    </form>
+        <body>or</body>
+        <br>
+    <form>
         <label for="max-price">Maximum Price:</label>
         <input type="number" min="0" value="0" id="max-price" name="price" class="price-input" placeholder="$265000" >
         <br>
