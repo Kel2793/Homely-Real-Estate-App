@@ -3,8 +3,8 @@
 <head>
     <script defer type="text/javascript" src="homePage.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <title>Real Estate Website</title>
     <style>
         body {
@@ -33,15 +33,15 @@
 </header>
 <main>
     <h2>Browse Available Homes</h2>
-    <form class="card-search-criteria" id="get-all-open-listings-form">
+    <form class="card-search-criteria" id="get-all-listings-form">
         <button type="submit">View All Listings</button>
     </form>
-    <div class="card" id="all-open-listing">
+    <div class="card" id="all-listings">
         <h2>All Listings:</h2>
         <p id="all-listings-info"></p>
     </div>
     <br>
-    <!-- Display all homes for sale in a table -->
+    <!-- Display all homes available in a table -->
 
     <!-- Table rows for each home
     <tr>
@@ -74,7 +74,7 @@
     <h2>Update the Price of a Listing</h2>
     <form class="card-update-price" id="update-price-form">
         <label for="listingNumber-update-price">Listing Id:</label>
-        <input type="text" min="0" value="0" id="listingNumber-update-price" name="listingNumber" class="listingNumber-input" placeholder="728agt8b" required>
+        <input type="text" id="listingNumber-update-price" name="listingNumber" class="listingNumber-input" placeholder="728agt8b" required>
         <br>
         <label for="new-price">New Price:</label>
         <input type="number" min="0" value="0" id="new-price" name="price" class="price-input" placeholder="$300000" required>
@@ -85,10 +85,10 @@
     <h2>Update the Status of Listing</h2>
     <form class="card-update-status" id="update-listing-status-form">
         <label for="listingNumber-update-status">Listing Id:</label>
-        <input type="text" min="0" value="0" id="listingNumber-update-status" name="listingNumber" class="listingNumber-input" placeholder="134aef4j" required>
+        <input type="text" id="listingNumber-update-status" name="listingNumber" class="listingNumber-input" placeholder="134aef4j" required>
         <br>
         <label for="listingStatus-update-status">New Status:</label>
-        <input type="text" min="0" value="0" id="listingStatus-update-status" name="listingStatus" class="listingStatus-input" placeholder="Under Contract" required>
+        <input type="text" id="listingStatus-update-status" name="listingStatus" class="listingStatus-input" placeholder="Under Contract" required>
         <br>
         <button type="submit">Update Status</button>
     </form>
@@ -127,7 +127,7 @@
     <h2>Delete a Listing</h2>
     <form class="card-delete-listing" id="delete-listing-form">
         <label for="listingNumber-delete-listing">Listing Id:</label>
-        <input type="text" min="0" value="0" id="listingNumber-delete-listing" name="listingNumber" class="listingNumber-input" placeholder="134aef4j" required>
+        <input type="text" id="listingNumber-delete-listing" name="listingNumber" class="listingNumber-input" placeholder="134aef4j" required>
         <br>
         <button type="submit">Delete Listing</button>
     </form>

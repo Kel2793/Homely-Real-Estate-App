@@ -8,7 +8,7 @@ export default class ListingClient extends BaseClass {
 
     constructor(props = {}){
         super();
-        const methodsToBind = ['clientLoaded', 'getParameterizedListings','getAllOpenListings', 'createListing' ];
+        const methodsToBind = ['clientLoaded', 'getParameterizedListings','getAllListings', 'createListing', 'deleteListingById', 'updatePrice', 'updateStatus'];
         this.bindClassMethods(methodsToBind, this);
         this.props = props;
         this.clientLoaded(axios);
@@ -53,12 +53,57 @@ export default class ListingClient extends BaseClass {
         }
     }
 
-    async getAllOpenListings(errorCallback) {
+    async getAllListings(errorCallback) {
         try {
-            const response = await this.client.get(`/listing/allOpen`);
+            const response = await this.client.get(`/listing`);
             return response.data;
         } catch (error) {
-            this.handleError("getAllOpenListings", error, errorCallback)
+            this.handleError("getAllListings", error, errorCallback)
+        }
+    }
+
+    async deleteListingById(listingNumber, errorCallback) {
+        try {
+            const response = await this.client.delete(`/listing/${listingNumber}`);
+            return response.data;
+        } catch (error) {
+            this.handleError("deleteListingById", error, errorCallback)
+        }
+    }
+
+    async updatePrice(listingNumber, address, squareFootage, price, numBedrooms, numBathrooms, listingStatus, lotSize, errorCallback) {
+        try {
+            const response = await this.client.put(`/listing/price/${price}`, {
+                "listingNumber": listingNumber,
+                "address": address,
+                "squareFootage": squareFootage,
+                "price": price,
+                "numBedrooms": numBedrooms,
+                "numBathrooms": numBathrooms,
+                "listingStatus": listingStatus,
+                "lotSize": lotSize
+            });
+            return response.data;
+        } catch (error) {
+            this.handleError("updatePrice", error, errorCallback)
+        }
+    }
+
+    async updateStatus(listingNumber, address, squareFootage, price, numBedrooms, numBathrooms, listingStatus, lotSize, errorCallback) {
+        try {
+            const response = await this.client.put(`/listing/listingStatus/${listingStatus}`, {
+                "listingNumber": listingNumber,
+                "address": address,
+                "squareFootage": squareFootage,
+                "price": price,
+                "numBedrooms": numBedrooms,
+                "numBathrooms": numBathrooms,
+                "listingStatus": listingStatus,
+                "lotSize": lotSize
+            });
+            return response.data;
+        } catch (error) {
+            this.handleError("updateStatus", error, errorCallback)
         }
     }
 

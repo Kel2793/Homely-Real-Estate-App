@@ -9,7 +9,7 @@ class HomePage extends BaseClass {
 
     constructor() {
         super();
-        this.bindClassMethods(['onSearch', 'onGetListings', 'onCreate', 'renderHomeListing', 'renderHomeSearch'], this);
+        this.bindClassMethods(['onSearch', 'onGetListings', 'onDeleteListing', 'onUpdatePrice', 'onUpdateStatus', 'onCreate', 'renderHomeListing', 'renderHomeSearch'], this);
         this.dataStore = new DataStore();
     }
 
@@ -19,7 +19,10 @@ class HomePage extends BaseClass {
     async mount() {
         document.getElementById('create-form').addEventListener('submit', this.onCreate);
         document.getElementById('search-homes-form').addEventListener('submit', this.onSearch);
-        document.getElementById('get-all-open-listings-form').addEventListener('submit', this.onGetListings);
+        document.getElementById('get-all-listings-form').addEventListener('submit', this.onGetListings);
+        document.getElementById('delete-listing-form').addEventListener('submit', this.onDeleteListing);
+        document.getElementById('update-price-form').addEventListener('submit', this.onUpdatePrice);
+        document.getElementById('update-listing-status-form').addEventListener('submit', this.onUpdateStatus);
         this.client = new ListingClient();
 
         this.dataStore.addChangeListener(this.renderHomeSearch);
@@ -132,11 +135,11 @@ class HomePage extends BaseClass {
         // Prevent the page from refreshing on form submit
         event.preventDefault();
 
-        const listings = await this.client.getAllOpenListings(this.errorHandler);
+        const listings = await this.client.getAllListings(this.errorHandler);
         this.dataStore.set("listings", listings);
 
         if (listings) {
-            this.showMessage(`Here you go!`)
+            this.showMessage(`Here you go!`);
         } else {
             this.errorHandler("Error getting listings!  Try again...");
         }
@@ -157,9 +160,9 @@ class HomePage extends BaseClass {
         this.dataStore.set("searchedHomes", searchedHomes);
 
         if (searchedHomes) {
-            this.showMessage(`Search successful!`)
+            this.showMessage(`Search successful!`);
         } else {
-            this.errorHandler("Error searching!  Try again...");
+            this.showMessage("No matching homes!  Try again...");
         }
     }
 
@@ -178,11 +181,106 @@ class HomePage extends BaseClass {
         const createdListing = await this.client.createListing(address, price, numBedrooms, numBathrooms, squareFootage, listingStatus, lotSize, this.errorHandler);
 
         if (createdListing) {
-            this.showMessage(`Created Listing!`)
+            this.showMessage(`Created Listing!`);
         } else {
             this.errorHandler("Error creating!  Try again...");
         }
+        await this.onGetListings(event);
+        await this.renderHomeListing();
+    }
 
+    async onDeleteListing(event) {
+        // Prevent the page from refreshing on form submit
+        event.preventDefault();
+
+        const listingNumber = document.getElementById("listingNumber-delete-listing").value;
+        const deleteListing = await this.client.deleteListingById(listingNumber, this.errorHandler);
+
+        if (!deleteListing.data) {
+            this.showMessage(`Deleted Listing!`);
+        } else {
+            this.errorHandler("Error deleting listing!  Try again...");
+        }
+        await this.onGetListings(event);
+        await this.renderHomeListing();
+    }
+
+    async onUpdatePrice(event) {
+        // Prevent the page from refreshing on form submit
+        event.preventDefault();
+
+        const listingNumber = document.getElementById("listingNumber-update-price").value;
+        const newPrice = document.getElementById("new-price").value;
+        let address = "";
+        let price = newPrice;
+        let numBedrooms = "";
+        let numBathrooms = "";
+        let squareFootage = "";
+        let listingStatus = "";
+        let lotSize = "";
+
+        let listingsToUpdate = this.dataStore.get("listings");
+        if (listingsToUpdate && listingsToUpdate.length !== 0) {
+            for (let listingToUpdate of listingsToUpdate) {
+                if (listingNumber === listingToUpdate.listingNumber){
+                    address = listingToUpdate.address;
+                    squareFootage = listingToUpdate.squareFootage;
+                    numBedrooms = listingToUpdate.numBedrooms;
+                    numBathrooms = listingToUpdate.numBathrooms;
+                    listingStatus = listingToUpdate.listingStatus;
+                    lotSize = listingToUpdate.lotSize;
+                }
+            }
+        }
+
+        const updatePrice = await this.client.updatePrice(listingNumber, address, squareFootage, price, numBedrooms, numBathrooms, listingStatus, lotSize, this.errorHandler);
+
+        if (!updatePrice.data) {
+            this.showMessage(`Updated Listing price!`);
+        } else {
+            this.errorHandler("Error updating price!  Try again...");
+        }
+        await this.onGetListings(event);
+        await this.renderHomeListing();
+    }
+
+    async onUpdateStatus(event) {
+        // Prevent the page from refreshing on form submit
+        event.preventDefault();
+
+        const listingNumber = document.getElementById("listingNumber-update-status").value;
+        const newListingStatus = document.getElementById("listingStatus-update-status").value;
+        let address = "";
+        let price = "";
+        let numBedrooms = "";
+        let numBathrooms = "";
+        let squareFootage = "";
+        let listingStatus = newListingStatus;
+        let lotSize = "";
+
+        let listingsToUpdate = this.dataStore.get("listings");
+        if (listingsToUpdate && listingsToUpdate.length !== 0) {
+            for (let listingToUpdate of listingsToUpdate) {
+                if (listingNumber === listingToUpdate.listingNumber){
+                    address = listingToUpdate.address;
+                    squareFootage = listingToUpdate.squareFootage;
+                    price = listingToUpdate.price;
+                    numBedrooms = listingToUpdate.numBedrooms;
+                    numBathrooms = listingToUpdate.numBathrooms;
+                    lotSize = listingToUpdate.lotSize;
+                }
+            }
+        }
+
+        const updateStatus = await this.client.updateStatus(listingNumber, address, squareFootage, price, numBedrooms, numBathrooms, listingStatus, lotSize, this.errorHandler);
+
+        if (!updateStatus.data) {
+            this.showMessage(`Updated Listing status!`);
+        } else {
+            this.errorHandler("Error updating status!  Try again...");
+        }
+        await this.onGetListings(event);
+        await this.renderHomeListing();
     }
 }
 
