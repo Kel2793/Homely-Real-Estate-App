@@ -71,7 +71,29 @@
         <p id="result-info"></p>
     </div>
     <br>
-    <!-- Display the search results in a table -->
+    <h2>Update the Price of a Listing</h2>
+    <form class="card-update-price" id="update-price-form">
+        <label for="listingNumber-update-price">Listing Id:</label>
+        <input type="text" min="0" value="0" id="listingNumber-update-price" name="listingNumber" class="listingNumber-input" placeholder="728agt8b" required>
+        <br>
+        <label for="new-price">New Price:</label>
+        <input type="number" min="0" value="0" id="new-price" name="price" class="price-input" placeholder="$300000" required>
+        <br>
+        <button type="submit">Update Price</button>
+    </form>
+    <br>
+    <h2>Update the Status of Listing</h2>
+    <form class="card-update-status" id="update-listing-status-form">
+        <label for="listingNumber-update-status">Listing Id:</label>
+        <input type="text" min="0" value="0" id="listingNumber-update-status" name="listingNumber" class="listingNumber-input" placeholder="134aef4j" required>
+        <br>
+        <label for="listingStatus-update-status">New Status:</label>
+        <input type="text" min="0" value="0" id="listingStatus-update-status" name="listingStatus" class="listingStatus-input" placeholder="Under Contract" required>
+        <br>
+        <button type="submit">Update Status</button>
+    </form>
+    <br>
+        <!-- Display the search results in a table -->
 
     <!-- Table rows for each home in the search results
     <tr>
@@ -101,7 +123,13 @@
         <br>
         <button type="submit">Create</button>
     </form>
-
+    <h2>Delete a Listing</h2>
+    <form class="card-delete-listing" id="delete-listing-form">
+        <label for="listingNumber-delete-listing">Listing Id:</label>
+        <input type="text" min="0" value="0" id="listingNumber-delete-listing" name="listingNumber" class="listingNumber-input" placeholder="134aef4j" required>
+        <br>
+        <button type="submit">Delete Listing</button>
+    </form>
 </main>
 <footer>
     <p>Copyright 2023</p>
