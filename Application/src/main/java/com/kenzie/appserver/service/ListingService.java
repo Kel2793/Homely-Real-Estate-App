@@ -254,14 +254,16 @@ public class ListingService {
 
         assert listingIterator != null;
         for(ListingRecord listingRecord : listingIterator){
-            parameterizedListings.add(new Listing(listingRecord.getListingNumber(),
-                    listingRecord.getAddress(),
-                    listingRecord.getSquareFootage(),
-                    listingRecord.getPrice(),
-                    listingRecord.getNumBedrooms(),
-                    listingRecord.getNumBathrooms(),
-                    listingRecord.getLotSize(),
-                    listingRecord.getListingStatus()));
+            if(listingRecord.getListingStatus().equalsIgnoreCase(ListingStatus.FOR_SALE.label)) {
+                parameterizedListings.add(new Listing(listingRecord.getListingNumber(),
+                        listingRecord.getAddress(),
+                        listingRecord.getSquareFootage(),
+                        listingRecord.getPrice(),
+                        listingRecord.getNumBedrooms(),
+                        listingRecord.getNumBathrooms(),
+                        listingRecord.getLotSize(),
+                        listingRecord.getListingStatus()));
+            }
         }
 
         return parameterizedListings;
