@@ -36,7 +36,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ListingControllerTest {
     @Autowired
     private MockMvc mvc;
-
     @Autowired
     ListingService listingService;
     private ObjectMapper mapper;
@@ -221,7 +220,6 @@ class ListingControllerTest {
         for (ListingResponse listingResponse : byNumOfBedroomsEqualsOrGreaterListingsResponseList) {
             assertThat(listingResponse.getNumBedrooms()).isGreaterThanOrEqualTo(numBedrooms);
         }
-
     }
 
     @Test
@@ -248,9 +246,9 @@ class ListingControllerTest {
     public void getParameterizedListings_givenAllValidQueryParameters_successful() throws Exception {
         // GIVEN
         // Already created newListings in setup()
-        Integer squareFootage = 2000;
-        Integer price = 1000000;
-        Integer numBedrooms = 2;
+        Integer squareFootage = 0;
+        Integer price = 100000000;
+        Integer numBedrooms = 0;
         Double lotSize = 0.0;
         Double numBathrooms = 0.0;
 
