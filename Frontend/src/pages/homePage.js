@@ -20,28 +20,24 @@ class HomePage extends BaseClass {
         document.getElementById('create-form').addEventListener('submit', this.onCreate);
         document.getElementById('search-homes-form').addEventListener('submit', this.onSearch);
         document.getElementById('get-all-open-listings-form').addEventListener('submit', this.onGetListings);
-        document.getElementById('search-by-listingNumber-form').addEventListener('submit', this.onSearch);
         this.client = new ListingClient();
 
         this.dataStore.addChangeListener(this.renderHomeSearch);
         this.dataStore.addChangeListener(this.renderHomeListing);
-        this.onGetListings();
-        //this.onSearch();
     }
 
     // Render Methods --------------------------------------------------------------------------------------------------
 
     async renderHomeListing() {
-        let listingResultArea = document.getElementById("newListing-info");
+        let listingResultArea = document.getElementById("all-listings-info");
+        let allListings = this.dataStore.get("listings");
 
-        const newListing = this.dataStore.get("newHomes");
-
-        if (newListing) {
-            listingResultArea.innerHTML = `
+        listingResultArea.innerHTML = `
                 <div class="row">
                     <table class="table-bordered">
                         <thead>
                             <tr>
+                            
                                 <th> Listing Number</th>
                                 <th> Address</th>
                                 <th> Square Footage</th>
@@ -52,44 +48,45 @@ class HomePage extends BaseClass {
                                 <th> Lot Size</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="listAllHomes">
+                        
             `;
+        if (allListings && allListings.length !== 0) {
+            const tableBody = document.getElementById("listAllHomes");
+            for (let allListing of allListings) {
+                let row = tableBody.insertRow();
+                let listingNumber = row.insertCell(0);
+                listingNumber.innerHTML = allListing.listingNumber;
+                let address = row.insertCell(1);
+                address.innerHTML = allListing.address;
+                let squareFootage = row.insertCell(2);
+                squareFootage.innerHTML = allListing.squareFootage;
+                let price = row.insertCell(3);
+                price.innerHTML = allListing.price;
+                let numBedrooms = row.insertCell(4);
+                numBedrooms.innerHTML = allListing.numBedrooms;
+                let numBathrooms = row.insertCell(5);
+                numBathrooms.innerHTML = allListing.numBathrooms;
+                let listingStatus = row.insertCell(6);
+                listingStatus.innerHTML = allListing.listingStatus;
+                let lotSize = row.insertCell(7);
+                lotSize.innerHTML = allListing.lotSize;
 
-                           // for (let newListing of newListings) {
-                                listingResultArea.innerHTML += `
-                                 <tr>
-                                    <td> ${newListing.listingNumber}</td>
-                                    <td> ${newListing.address} </td>
-                                    <td> ${newListing.squareFootage} </td>
-                                    <td> ${newListing.price} </td>
-                                    <td> ${newListing.numBedrooms} </td>
-                                    <td> ${newListing.numBathrooms} </td>
-                                    <td> ${newListing.listingStatus} </td>
-                                    <td> ${newListing.lotSize} </td>
-                                </tr>`;
-                           // }
-            listingResultArea.innerHTML += `
-                        </tbody>
-                    </table>`;
-
-        } else {
-            listingResultArea.innerHTML = "No Item";
+            }
         }
     }
 
 
     async renderHomeSearch() {
         let resultArea = document.getElementById("result-info");
-        var searchResults = [];
+        let searchResults = this.dataStore.get("searchedHomes");
 
-        searchResults = this.dataStore.get("searchedHomes");
-
-        if (searchResults) {
             resultArea.innerHTML = `
                 <div class="row">
                     <table class="table-bordered">
                         <thead>
                             <tr>
+                            
                                 <th> Listing Number</th>
                                 <th> Address</th>
                                 <th> Square Footage</th>
@@ -100,38 +97,54 @@ class HomePage extends BaseClass {
                                 <th> Lot Size</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="homeSearch">
+                        
             `;
-                         for (let searchResult of searchResults) {
-                            resultArea.innerHTML += `
-                                 <tr>
-                                    <td> ${searchResult.listingNumber}</td>
-                                    <td> ${searchResult.address} </td>
-                                    <td> ${searchResult.squareFootage} </td>
-                                    <td> ${searchResult.price} </td>
-                                    <td> ${searchResult.numBedrooms} </td>
-                                    <td> ${searchResult.numBathrooms} </td>
-                                    <td> ${searchResult.listingStatus} </td>
-                                    <td> ${searchResult.lotSize} </td>
-                                </tr>`;
-                            }
-            resultArea.innerHTML += `
-                         </tbody>
-                    </table>`;
-        } else {
-            resultArea.innerHTML = "No Item";
+        if (searchResults && searchResults.length !== 0) {
+            const tableBody = document.getElementById("homeSearch");
+            for (let searchResult of searchResults) {
+                let row = tableBody.insertRow();
+                let listingNumber = row.insertCell(0);
+                listingNumber.innerHTML = searchResult.listingNumber;
+                let address = row.insertCell(1);
+                address.innerHTML = searchResult.address;
+                let squareFootage = row.insertCell(2);
+                squareFootage.innerHTML = searchResult.squareFootage;
+                let price = row.insertCell(3);
+                price.innerHTML = searchResult.price;
+                let numBedrooms = row.insertCell(4);
+                numBedrooms.innerHTML = searchResult.numBedrooms;
+                let numBathrooms = row.insertCell(5);
+                numBathrooms.innerHTML = searchResult.numBathrooms;
+                let listingStatus = row.insertCell(6);
+                listingStatus.innerHTML = searchResult.listingStatus;
+                let lotSize = row.insertCell(7);
+                lotSize.innerHTML = searchResult.lotSize;
+
+            }
         }
     }
 
 
     // Event Handlers --------------------------------------------------------------------------------------------------
 
-    async onGetListings() {
-        let result = await this.client.getAllOpenListings(this.errorHandler);
-        this.dataStore.set("listing", result);
+    async onGetListings(event) {
+        // Prevent the page from refreshing on form submit
+        event.preventDefault();
+
+        const listings = await this.client.getAllOpenListings(this.errorHandler);
+        this.dataStore.set("listings", listings);
+
+        if (listings) {
+            this.showMessage(`Here you go!`)
+        } else {
+            this.errorHandler("Error getting listings!  Try again...");
+        }
     }
 
-    async onSearch() {
+    async onSearch(event) {
+        // Prevent the page from refreshing on form submit
+        event.preventDefault();
 
         let squareFootage = document.getElementById("min-squareFootage").value;
         let price = document.getElementById("max-price").value;
@@ -163,14 +176,14 @@ class HomePage extends BaseClass {
         let lotSize = document.getElementById("lotSize").value;
 
         const createdListing = await this.client.createListing(address, price, numBedrooms, numBathrooms, squareFootage, listingStatus, lotSize, this.errorHandler);
-        this.dataStore.set("newHomes", createdListing);
+        //this.dataStore.set("listings", createdListing);
 
         if (createdListing) {
             this.showMessage(`Created Listing!`)
         } else {
             this.errorHandler("Error creating!  Try again...");
         }
-        this.onGetListings();
+
     }
 }
 

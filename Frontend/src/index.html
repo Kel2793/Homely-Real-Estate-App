@@ -2,6 +2,7 @@
 <html>
 <head>
     <script defer type="text/javascript" src="homePage.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <title>Real Estate Website</title>
@@ -35,15 +36,17 @@
     <form class="card-search-criteria" id="get-all-open-listings-form">
         <button type="submit">View All Listings</button>
     </form>
+    <div class="card" id="all-open-listing">
+        <h2>All Listings:</h2>
+        <p id="all-listings-info"></p>
+    </div>
     <br>
-    <form class="card-search-criteria" id="search-by-listingNumber-form">
-        <label for="listingNumber">Listing Number:</label>
-        <input type="text" min="0" value="0" id="listingNumber" name="listingNumber" class="listingNumber-input" placeholder="8eaf34kj" >
-        <br>
-        <button type="submit">Search by Id</button>
-    </form>
-        <body>or</body>
-        <br>
+    <!-- Display all homes for sale in a table -->
+
+    <!-- Table rows for each home
+    <tr>
+    </tr> -->
+
     <form class="card-search-criteria" id="search-homes-form">
         <label for="max-price">Maximum Price:</label>
         <input type="number" min="0" value="0" id="max-price" name="price" class="price-input" placeholder="$265000" >
@@ -98,17 +101,6 @@
         <br>
         <button type="submit">Create</button>
     </form>
-
-    <div class="card" id="new-listing">
-        <h2>Homes for Sale:</h2>
-        <p id="newListing-info"></p>
-    </div>
-    <br>
-    <!-- Display the homes for sale in a table -->
-
-    <!-- Table rows for each home
-    <tr>
-    </tr> -->
 
 </main>
 <footer>
