@@ -114,7 +114,7 @@ public class ListingGenerator {
 
     public Listing generateListing() {
 
-        String id = UUID.randomUUID().toString();
+        String id = generateId();
 
         String houseNumberString = Integer.toString(random.nextInt(10000));
         String streetName = streetNames.get(random.nextInt(streetNames.size()));

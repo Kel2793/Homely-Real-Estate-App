@@ -21,6 +21,7 @@ public class ListingServiceTest {
     private ListingService listingService;
 
     private CacheStore cacheStore;
+    private ListingGenerator generator = new ListingGenerator();
 
     @BeforeEach
     void setup() {
@@ -31,27 +32,12 @@ public class ListingServiceTest {
 
     @Test
     public void findAllListings() {
-        Listing listing1 = new Listing(UUID.randomUUID().toString(),
-                "123 Main St, City, State 11111",
-                1600,
-                250000,
-                3,
-                2,
-                2,
-                "For sale");
 
-        Listing listing2 = new Listing(UUID.randomUUID().toString(),
-                "321 Main St, City, State 11111",
-                1850,
-                325000,
-                4,
-                3,
-                3,
-                "For sale");
+        Listing generatedListing1 = generator.generateListing();
+        Listing generatedListing2 = generator.generateListing();
 
-        ListingRecord record1 = createListingRecord(listing1);
-
-        ListingRecord record2 = createListingRecord(listing2);
+        ListingRecord record1 = createListingRecord(generatedListing1);
+        ListingRecord record2 = createListingRecord(generatedListing2);
 
         List<ListingRecord> records = new ArrayList<>();
         records.add(record1);
@@ -65,22 +51,22 @@ public class ListingServiceTest {
         Assertions.assertEquals(2, actualListings.size(), "There are two listings");
 
         for (Listing listing : actualListings) {
-            if (listing.getListingNumber().equals(listing1.getListingNumber())) {
-                Assertions.assertEquals(listing1.getAddress(), listing.getAddress());
-                Assertions.assertEquals(listing1.getSquareFootage(), listing.getSquareFootage());
-                Assertions.assertEquals(listing1.getPrice(), listing.getPrice());
-                Assertions.assertEquals(listing1.getNumBedrooms(), listing.getNumBedrooms());
-                Assertions.assertEquals(listing1.getNumBathrooms(), listing.getNumBathrooms());
-                Assertions.assertEquals(listing1.getLotSize(), listing.getLotSize());
-                Assertions.assertEquals(listing1.getListingStatus(), listing.getListingStatus());
-            } else if (listing.getListingNumber().equals(listing2.getListingNumber())) {
-                Assertions.assertEquals(listing2.getAddress(), listing.getAddress());
-                Assertions.assertEquals(listing2.getSquareFootage(), listing.getSquareFootage());
-                Assertions.assertEquals(listing2.getPrice(), listing.getPrice());
-                Assertions.assertEquals(listing2.getNumBedrooms(), listing.getNumBedrooms());
-                Assertions.assertEquals(listing2.getNumBathrooms(), listing.getNumBathrooms());
-                Assertions.assertEquals(listing2.getLotSize(), listing.getLotSize());
-                Assertions.assertEquals(listing2.getListingStatus(), listing.getListingStatus());
+            if (listing.getListingNumber().equals(generatedListing1.getListingNumber())) {
+                Assertions.assertEquals(generatedListing1.getAddress(), listing.getAddress());
+                Assertions.assertEquals(generatedListing1.getSquareFootage(), listing.getSquareFootage());
+                Assertions.assertEquals(generatedListing1.getPrice(), listing.getPrice());
+                Assertions.assertEquals(generatedListing1.getNumBedrooms(), listing.getNumBedrooms());
+                Assertions.assertEquals(generatedListing1.getNumBathrooms(), listing.getNumBathrooms());
+                Assertions.assertEquals(generatedListing1.getLotSize(), listing.getLotSize());
+                Assertions.assertEquals(generatedListing1.getListingStatus(), listing.getListingStatus());
+            } else if (listing.getListingNumber().equals(generatedListing2.getListingNumber())) {
+                Assertions.assertEquals(generatedListing2.getAddress(), listing.getAddress());
+                Assertions.assertEquals(generatedListing2.getSquareFootage(), listing.getSquareFootage());
+                Assertions.assertEquals(generatedListing2.getPrice(), listing.getPrice());
+                Assertions.assertEquals(generatedListing2.getNumBedrooms(), listing.getNumBedrooms());
+                Assertions.assertEquals(generatedListing2.getNumBathrooms(), listing.getNumBathrooms());
+                Assertions.assertEquals(generatedListing2.getLotSize(), listing.getLotSize());
+                Assertions.assertEquals(generatedListing2.getListingStatus(), listing.getListingStatus());
             } else {
                 Assertions.assertTrue(false, "Listing returned that was not in the records!");
             }
@@ -89,7 +75,7 @@ public class ListingServiceTest {
 
     @Test
     public void findByListingNumber() {
-        String listingNumber = UUID.randomUUID().toString();
+        String listingNumber = generator.generateId();
 
         Listing listing = new Listing(
                 listingNumber,
@@ -122,7 +108,7 @@ public class ListingServiceTest {
 
     @Test
     public void findByListingNumber_cacheIsUsed() {
-        String listingNumber = UUID.randomUUID().toString();
+        String listingNumber = generator.generateId();
 
         Listing listing = new Listing(
                 listingNumber,
@@ -152,7 +138,7 @@ public class ListingServiceTest {
 
     @Test
     void findByListingNumber_optionalRecordNotPresent_returnsNull() {
-        String listingNumber = UUID.randomUUID().toString();
+        String listingNumber = generator.generateId();
 
         Listing listing = new Listing(
                 listingNumber,
@@ -175,7 +161,7 @@ public class ListingServiceTest {
 
     @Test
     void findAllOpenListings() {
-        Listing listing1 = new Listing(UUID.randomUUID().toString(),
+        Listing listing1 = new Listing(generator.generateId(),
                 "123 Main St, City, State 11111",
                 1700,
                 425000,
@@ -184,7 +170,7 @@ public class ListingServiceTest {
                 1,
                 "For sale");
 
-        Listing listing2 = new Listing(UUID.randomUUID().toString(),
+        Listing listing2 = new Listing(generator.generateId(),
                 "321 Main St, City, State 11111",
                 1600,
                 650000,
@@ -219,7 +205,7 @@ public class ListingServiceTest {
 
     @Test
     void createNewListing_forSaleStatus_createsListing() {
-        Listing listing = new Listing(UUID.randomUUID().toString(),
+        Listing listing = new Listing(generator.generateId(),
                 "111 Test St., City, State, 11111",
                 1900,
                 450000,
@@ -241,7 +227,7 @@ public class ListingServiceTest {
 
     @Test
     void createNewListing_forWithdrawnStatus_createsListing() {
-        Listing listing = new Listing(UUID.randomUUID().toString(),
+        Listing listing = new Listing(generator.generateId(),
                 "111 Test St., City, State, 11111",
                 1900,
                 450000,
@@ -339,7 +325,7 @@ public class ListingServiceTest {
 
     @Test
     void updatePrice() {
-        String listingNumber = UUID.randomUUID().toString();
+        String listingNumber = generator.generateId();
 
         Listing listing = new Listing(listingNumber,
                 "123 Test Road, City, State, 10101",
@@ -376,7 +362,7 @@ public class ListingServiceTest {
 
     @Test
     void updateListingStatus() {
-        String listingNumber = UUID.randomUUID().toString();
+        String listingNumber = generator.generateId();
 
         Listing listing = new Listing(listingNumber,
                 "123 Test Drive, City, State, 10101",
@@ -414,7 +400,7 @@ public class ListingServiceTest {
 
     @Test
     void updateStatus_doesNotExistById_doesNothing() {
-        String listingNumber = UUID.randomUUID().toString();
+        String listingNumber = generator.generateId();
 
         Listing listing = new Listing(listingNumber,
                 "123 Test Drive, City, State, 10101",
@@ -436,7 +422,7 @@ public class ListingServiceTest {
 
     @Test
     void updatePrice_doesNotExistById_doesNothing() {
-        String listingNumber = UUID.randomUUID().toString();
+        String listingNumber = generator.generateId();
 
         Listing listing = new Listing(listingNumber,
                 "123 Test Drive, City, State, 10101",
@@ -458,7 +444,7 @@ public class ListingServiceTest {
 
     @Test
     void deleteListing() {
-        String listingNumber = UUID.randomUUID().toString();
+        String listingNumber = generator.generateId();
 
         Listing listing = new Listing(listingNumber,
                 "123 Test Drive, City, State, 10101",
@@ -491,7 +477,7 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_allParametersEntered_returnsSortedList() {
-        Listing listing1 = new Listing(UUID.randomUUID().toString(),
+        Listing listing1 = new Listing(generator.generateId(),
                 "123 Main St, City, State 11111",
                 1700,
                 349000,
@@ -505,9 +491,9 @@ public class ListingServiceTest {
         List<ListingRecord> expected = new ArrayList<>();
         expected.add(record1);
 
-        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1800, 350000, 5, 0.0, 2.00)).thenReturn(expected);
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1800, 350000, 5, 2.0, 2.00)).thenReturn(expected);
 
-        List<Listing> actualList = listingService.findParameterizedListings(1800, 350000, 5, 0,2.00);
+        List<Listing> actualList = listingService.findParameterizedListings(1800, 350000, 5, 2.0,2.00);
 
         Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
         Assertions.assertEquals(1, actualList.size());
@@ -523,7 +509,7 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_onlySquareFootageEntered_returnsSortedList() {
-        Listing listing1 = new Listing(UUID.randomUUID().toString(),
+        Listing listing1 = new Listing(generator.generateId(),
                 "123 Main St, City, State 11111",
                 1200,
                 500000,
@@ -555,7 +541,7 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_onlyPriceEntered_returnsSortedList() {
-        Listing listing1 = new Listing(UUID.randomUUID().toString(),
+        Listing listing1 = new Listing(generator.generateId(),
                 "123 Main St, City, State 11111",
                 1350,
                 400000,
@@ -564,7 +550,7 @@ public class ListingServiceTest {
                 0.5,
                 "For sale");
 
-        Listing listing2 = new Listing(UUID.randomUUID().toString(),
+        Listing listing2 = new Listing(generator.generateId(),
                 "321 Main St, City, State 11111",
                 1302,
                 350000,
@@ -607,7 +593,7 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_onlyNumBedroomsEntered_returnsSortedList() {
-        Listing listing1 = new Listing(UUID.randomUUID().toString(),
+        Listing listing1 = new Listing(generator.generateId(),
                 "123 Main St, City, State 11111",
                 1200,
                 500000,
@@ -616,7 +602,7 @@ public class ListingServiceTest {
                 0.5,
                 "For sale");
 
-        Listing listing2 = new Listing(UUID.randomUUID().toString(),
+        Listing listing2 = new Listing(generator.generateId(),
                 "123 Main St, City, State 11111",
                 1250,
                 365000,
@@ -659,13 +645,13 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_onlyLotSizeEntered_returnsSortedList() {
-        Listing listing1 = new Listing(UUID.randomUUID().toString(),
+        Listing listing1 = new Listing(generator.generateId(),
                 "123 Main St, City, State 11111",
                 1425,
                 625000,
                 3,
                 2.0,
-                1.9,
+                2.9,
                 "For sale");
 
         ListingRecord record1 = createListingRecord(listing1);
@@ -675,7 +661,7 @@ public class ListingServiceTest {
 
         when(listingServiceRepository.findByLotSizeGreaterThanEqual(2.00)).thenReturn(expected);
 
-        List<Listing> actualList = listingService.findParameterizedListings(0, 0, 0, 2.0, 0.0);
+        List<Listing> actualList = listingService.findParameterizedListings(0, 0, 0, 0.0, 2.0);
 
         Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
         Assertions.assertEquals(1, actualList.size());

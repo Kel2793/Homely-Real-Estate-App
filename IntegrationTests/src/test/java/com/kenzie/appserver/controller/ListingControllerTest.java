@@ -51,10 +51,7 @@ class ListingControllerTest {
         for (int i = 0; i < 200; i++) {
             Listing generatedListing = listingGenerator.generateListing();
             newListings.add(generatedListing);
-        }
-
-        for (Listing listing : newListings) {
-            listingService.createNewListing(listing);
+            listingService.createNewListing(generatedListing);
         }
 
     }
