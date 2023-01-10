@@ -22,12 +22,27 @@ public class ListingServiceTest {
 
     private CacheStore cacheStore;
     private ListingGenerator generator = new ListingGenerator();
+    private Listing listing1;
+    private List<ListingRecord> expected = new ArrayList<>();
 
     @BeforeEach
     void setup() {
         cacheStore = mock(CacheStore.class);
         listingServiceRepository = mock(ListingRepository.class);
         listingService = new ListingService(listingServiceRepository, cacheStore);
+
+        listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1700,
+                349000,
+                4,
+                3.5,
+                1,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        expected.add(record1);
     }
 
     @Test
@@ -477,19 +492,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_allParametersEntered_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1700,
-                349000,
-                4,
-                3.5,
-                1,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1600, 350000, 3, 2.0, 0.5)).thenReturn(expected);
 
@@ -509,19 +511,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_onlySquareFootageEntered_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                0.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqual(1100)).thenReturn(expected);
 
@@ -541,19 +530,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_BedBathSquareFootPrice_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                0.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(100, 1000000, 1, 1.5)).thenReturn(expected);
 
@@ -573,19 +549,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootPriceBedLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                0.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(100, 1000000, 1, 0.3)).thenReturn(expected);
 
@@ -605,19 +568,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootPriceBathLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                0.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(100, 700000, 1.5, 0.3)).thenReturn(expected);
 
@@ -637,19 +587,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootBedBathLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                0.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(100, 1, 1.5, 0.3)).thenReturn(expected);
 
@@ -669,19 +606,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootPriceBed_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                0.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqual(100, 1000000, 1)).thenReturn(expected);
 
@@ -701,19 +625,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootPriceBath_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                0.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBathroomsGreaterThanEqual(100, 1000000, 1.0)).thenReturn(expected);
 
@@ -733,19 +644,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootPriceLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndLotSizeGreaterThanEqual(100, 1000000, 1.0)).thenReturn(expected);
 
@@ -765,19 +663,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootBedBath_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(100, 1, 1.0)).thenReturn(expected);
 
@@ -797,19 +682,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootBedLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(100, 1, 1.0)).thenReturn(expected);
 
@@ -829,19 +701,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootBathLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(100, 1.0, 1.0)).thenReturn(expected);
 
@@ -861,19 +720,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootPrice_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThan(100, 1000000)).thenReturn(expected);
 
@@ -893,19 +739,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootBath_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBathroomsGreaterThanEqual(100, 1.0)).thenReturn(expected);
 
@@ -925,19 +758,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_PriceBed_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqual(1000000, 1)).thenReturn(expected);
 
@@ -957,19 +777,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_PriceBath_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByPriceLessThanAndNumBathroomsGreaterThanEqual(1000000, 1.0)).thenReturn(expected);
 
@@ -989,19 +796,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_PriceLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByPriceLessThanAndLotSizeGreaterThanEqual(1000000, 1.0)).thenReturn(expected);
 
@@ -1021,19 +815,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootBed_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqual(100, 1)).thenReturn(expected);
 
@@ -1053,19 +834,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_SquareFootLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndLotSizeGreaterThanEqual(100, 1.0)).thenReturn(expected);
 
@@ -1085,19 +853,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_PriceBedBath_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(1000000, 1, 1.0)).thenReturn(expected);
 
@@ -1117,19 +872,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_PriceBedLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1000000, 1, 1.0)).thenReturn(expected);
 
@@ -1149,19 +891,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_PriceBathLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByPriceLessThanAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1000000, 1.0, 1.0)).thenReturn(expected);
 
@@ -1181,19 +910,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_PriceBedBathLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1000000, 1, 1.0, 1.0)).thenReturn(expected);
 
@@ -1213,19 +929,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_BedBath_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(1, 1.0)).thenReturn(expected);
 
@@ -1245,19 +948,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_BedLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1, 1.0)).thenReturn(expected);
 
@@ -1277,19 +967,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_BedBathLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1, 1.0, 1.0)).thenReturn(expected);
 
@@ -1309,19 +986,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_Bath_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByNumBathroomsGreaterThanEqual(1.0)).thenReturn(expected);
 
@@ -1341,19 +1005,6 @@ public class ListingServiceTest {
 
     @Test
     void findParameterizedListings_BathLot_returnsSortedList() {
-        Listing listing1 = new Listing(generator.generateId(),
-                "123 Main St, City, State 11111",
-                1200,
-                500000,
-                2,
-                2,
-                3.5,
-                "For sale");
-
-        ListingRecord record1 = createListingRecord(listing1);
-
-        List<ListingRecord> expected = new ArrayList<>();
-        expected.add(record1);
 
         when(listingServiceRepository.findByNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1.0, 1.0)).thenReturn(expected);
 
