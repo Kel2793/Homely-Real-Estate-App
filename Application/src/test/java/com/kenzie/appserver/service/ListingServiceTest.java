@@ -491,9 +491,9 @@ public class ListingServiceTest {
         List<ListingRecord> expected = new ArrayList<>();
         expected.add(record1);
 
-        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1800, 350000, 5, 2.0, 2.00)).thenReturn(expected);
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1600, 350000, 3, 2.0, 0.5)).thenReturn(expected);
 
-        List<Listing> actualList = listingService.findParameterizedListings(1800, 350000, 5, 2.0,2.00);
+        List<Listing> actualList = listingService.findParameterizedListings(1600, 350000, 3, 2.0,0.5);
 
         Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
         Assertions.assertEquals(1, actualList.size());
@@ -523,9 +523,9 @@ public class ListingServiceTest {
         List<ListingRecord> expected = new ArrayList<>();
         expected.add(record1);
 
-        when(listingServiceRepository.findBySquareFootageGreaterThanEqual(1300)).thenReturn(expected);
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqual(1100)).thenReturn(expected);
 
-        List<Listing> actualList = listingService.findParameterizedListings(1300, 0, 0, 0, 0.0);
+        List<Listing> actualList = listingService.findParameterizedListings(1100, 0, 0, 0, 0.0);
 
         Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
         Assertions.assertEquals(1, actualList.size());
@@ -538,6 +538,839 @@ public class ListingServiceTest {
         Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
         Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
     }
+
+    @Test
+    void findParameterizedListings_BedBathSquareFootPrice_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                0.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(100, 1000000, 1, 1.5)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 1000000, 1, 1.5, 0.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootPriceBedLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                0.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(100, 1000000, 1, 0.3)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 1000000, 1, 0.0, 0.3);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootPriceBathLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                0.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(100, 700000, 1.5, 0.3)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 700000, 0, 1.5, 0.3);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootBedBathLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                0.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(100, 1, 1.5, 0.3)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 0, 1, 1.5, 0.3);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootPriceBed_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                0.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBedroomsGreaterThanEqual(100, 1000000, 1)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 1000000, 1, 0, 0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootPriceBath_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                0.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndNumBathroomsGreaterThanEqual(100, 1000000, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 1000000, 0, 1.0, 0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootPriceLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThanAndLotSizeGreaterThanEqual(100, 1000000, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 1000000, 0, 0, 1.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootBedBath_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(100, 1, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 0, 1, 1.0, 0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootBedLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(100, 1, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 0, 1, 0, 1.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootBathLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(100, 1.0, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 0, 0, 1.0, 1.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootPrice_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndPriceLessThan(100, 1000000)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 1000000, 0, 0, 0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootBath_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBathroomsGreaterThanEqual(100, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 0, 0, 1.0, 0.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_PriceBed_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqual(1000000, 1)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 1000000, 1, 0.0, 0.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_PriceBath_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByPriceLessThanAndNumBathroomsGreaterThanEqual(1000000, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 1000000, 0, 1.0, 0.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_PriceLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByPriceLessThanAndLotSizeGreaterThanEqual(1000000, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 1000000, 0, 0.0, 1.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootBed_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndNumBedroomsGreaterThanEqual(100, 1)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 0, 1, 0.0, 0.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_SquareFootLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findBySquareFootageGreaterThanEqualAndLotSizeGreaterThanEqual(100, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(100, 0, 0, 0.0, 1.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_PriceBedBath_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(1000000, 1, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 1000000, 1, 1.0, 0.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_PriceBedLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1000000, 1, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 1000000, 1, 0.0, 1.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_PriceBathLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByPriceLessThanAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1000000, 1.0, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 1000000, 0, 1.0, 1.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_PriceBedBathLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByPriceLessThanAndNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1000000, 1, 1.0, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 1000000, 1, 1.0, 1.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_BedBath_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqual(1, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 0, 1, 1.0, 0.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_BedLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByNumBedroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 0, 1, 0.0, 1.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_BedBathLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByNumBedroomsGreaterThanEqualAndNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1, 1.0, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 0, 1, 1.0, 1.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_Bath_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByNumBathroomsGreaterThanEqual(1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 0, 0, 1.0, 0.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
+    @Test
+    void findParameterizedListings_BathLot_returnsSortedList() {
+        Listing listing1 = new Listing(generator.generateId(),
+                "123 Main St, City, State 11111",
+                1200,
+                500000,
+                2,
+                2,
+                3.5,
+                "For sale");
+
+        ListingRecord record1 = createListingRecord(listing1);
+
+        List<ListingRecord> expected = new ArrayList<>();
+        expected.add(record1);
+
+        when(listingServiceRepository.findByNumBathroomsGreaterThanEqualAndLotSizeGreaterThanEqual(1.0, 1.0)).thenReturn(expected);
+
+        List<Listing> actualList = listingService.findParameterizedListings(0, 0, 0, 1.0, 1.0);
+
+        Assertions.assertNotNull(actualList, "There should be one listing that matches the criteria");
+        Assertions.assertEquals(1, actualList.size());
+        Assertions.assertEquals(listing1.getListingNumber(), actualList.get(0).getListingNumber());
+        Assertions.assertEquals(listing1.getAddress(), actualList.get(0).getAddress());
+        Assertions.assertEquals(listing1.getSquareFootage(), actualList.get(0).getSquareFootage());
+        Assertions.assertEquals(listing1.getPrice(), actualList.get(0).getPrice());
+        Assertions.assertEquals(listing1.getNumBedrooms(), actualList.get(0).getNumBedrooms());
+        Assertions.assertEquals(listing1.getNumBathrooms(), actualList.get(0).getNumBathrooms());
+        Assertions.assertEquals(listing1.getLotSize(), actualList.get(0).getLotSize());
+        Assertions.assertEquals(listing1.getListingStatus(), actualList.get(0).getListingStatus());
+    }
+
 
     @Test
     void findParameterizedListings_onlyPriceEntered_returnsSortedList() {

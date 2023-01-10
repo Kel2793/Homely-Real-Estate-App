@@ -168,7 +168,7 @@ public class ListingService {
         }
 
         //Only the squareFootage and lotSize fields were entered with valid data by the user
-        if (squareFootage != 0 && price == 0 && numBedrooms != 0 && numBathrooms == 0.0 && lotSize == 0.0) {
+        if (squareFootage != 0 && price == 0 && numBedrooms == 0 && numBathrooms == 0.0 && lotSize != 0.0) {
             listingIterator = listingRepository.findBySquareFootageGreaterThanEqualAndLotSizeGreaterThanEqual(squareFootage, lotSize);
         }
 
@@ -193,7 +193,7 @@ public class ListingService {
         }
 
         //Only the price and lotSize fields were entered with valid data by the user
-        if (squareFootage == 0 && price != 0 && numBedrooms == 0 && numBathrooms != 0.0 && lotSize != 0.0) {
+        if (squareFootage == 0 && price != 0 && numBedrooms == 0 && numBathrooms == 0.0 && lotSize != 0.0) {
             listingIterator = listingRepository.findByPriceLessThanAndLotSizeGreaterThanEqual(price, lotSize);
         }
 
